@@ -20,15 +20,10 @@ fn main() -> ! {
     let x = 42;
     _y = x;
 
+    peripherals::gpio_test();
+
     // infinite loop; just so we don't leave this stack frame
     loop {
-        let button = peripherals::gpio_test();
-
-        if button {
-            peripherals::set_led();
-        } else {
-            peripherals::reset_led();
-        }
                 
     }
 }

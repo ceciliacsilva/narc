@@ -3,7 +3,7 @@
 
 use stm32l0::stm32l0x1;
 
-pub fn gpio_test() -> bool {
+pub fn gpio_test() {
     let mut peripherals = stm32l0x1::Peripherals::take().unwrap();
 
     let rcc = &peripherals.RCC;
@@ -13,26 +13,21 @@ pub fn gpio_test() -> bool {
     let gpioa = &peripherals.GPIOA;
 
     gpioa.moder.modify(|_, w| unsafe{ w.mode4().bits(0) } );
-    let button = gpioa.idr.read().id4();
+    gpioa.pupdr.modify(|_, w| unsafe { w.pupd4().bits(1) });
 
     gpioa.moder.modify(|_, w| unsafe{ w.mode5().bits(1) });
-    gpioa.odr.modify(|_, w| w.od5().set_bit());
-
-    button.bit_is_set()
-}
-
-pub fn set_led() {
-    let mut peripherals = stm32l0x1::Peripherals::take().unwrap();
-
-    let gpioa = &peripherals.GPIOA;
 
     gpioa.odr.modify(|_, w| w.od5().set_bit());
+
+    loop{
+        let button = gpioa.idr.read().id4();
+
+        if !button.bit_is_set() {
+            gpioa.odr.modify(|_, w| w.od5().set_bit());
+        } else {
+            gpioa.odr.modify(|_, w| w.od5().clear_bit());
+        }    
+    
+    }
 }
 
-pub fn reset_led() {
-    let mut peripherals = stm32l0x1::Peripherals::take().unwrap();
-
-    let gpioa = &peripherals.GPIOA;
-
-    gpioa.odr.modify(|_, w| w.od5().clear_bit());
-}

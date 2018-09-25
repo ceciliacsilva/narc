@@ -1,0 +1,4 @@
+cargo:rustc-link-lib=static=cortex-m
+cargo:rustc-link-search=/home/ceciliacarneiro/ufu/mestrado/pesquisa/rust_embedded_after_paper/moi/narc/quickstart/narc_rust/target/thumbv6m-none-eabi/debug/build/cortex-m-59ca43eb0e9e9087/out
+cargo:rustc-cfg=cortex_m
+cargo:rustc-cfg=armv6m

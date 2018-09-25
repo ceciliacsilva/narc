@@ -1,7 +1,9 @@
 [package]
-name = "quickstart"
+name = "narc-rust"
 version = "0.1.0"
+description = "NARC Project"
 authors = ["Cecília Carneiro <cecilia.carneiroesilva@gmail.com>"]
+repository = "https://github.com/ceciliacsilva/narc"
 
 [dependencies]
 cortex-m = "0.5.6"

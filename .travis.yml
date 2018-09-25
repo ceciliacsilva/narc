@@ -4,4 +4,4 @@ rust:
   - nightly
 
 script:
-  - cargo check
+  - cd narc_rust && cargo check

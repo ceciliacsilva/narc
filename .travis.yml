@@ -1,7 +1,12 @@
 language: rust
 
-rust:
-  - nightly
+matrix:
+  include:
+    - env: TARGET=thumbv6m-none-eabi
+      rust: nightly
+
+install:
+  - rustup target add $TARGET
 
 script:
   - cd narc_rust && cargo check

@@ -1,0 +1,20 @@
+[package]
+name = "hal"
+version = "0.1.0"
+authors = ["Cecília Carneiro <cecilia.carneiroesilva@gmail.com>"]
+
+[dependencies]
+cortex-m = "0.5.6"
+cortex-m-rt = "0.5.3"
+
+[dependencies.stm32l0]
+version = "0.2.3"
+features = ["stm32l0x1"]
+
+[dependencies.cast]
+default-features = false
+version = "0.2.2"
+
+[dependencies.embedded-hal]
+features = ["unproven"]
+version = "0.2.1"

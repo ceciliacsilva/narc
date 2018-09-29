@@ -1,4 +1,5 @@
 /target
 **/*.rs.bk
 *~
-narc_rust/target
+narc_rust/app/target
+narc_rust/hal/target

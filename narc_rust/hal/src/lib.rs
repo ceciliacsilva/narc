@@ -1,7 +1,6 @@
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}
+#![no_std]
+
+pub extern crate stm32l0;
+extern crate embedded_hal as hal;
+
+pub mod flash;

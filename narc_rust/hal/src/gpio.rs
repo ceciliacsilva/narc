@@ -156,16 +156,6 @@ macro_rules! gpio {
                 fn reset (&mut self);
             }
 
-            impl<MODE> OutputPin for $PXx<Output<MODE>> {
-                fn set (&mut self) {
-                    unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << self.i)) }
-                }
-
-                fn reset (&mut self) {
-                    unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << (16 + self.i))) }
-                }
-            }
-
             $(
                 /// Pin
                 pub struct $PXi<MODE> {
@@ -203,18 +193,30 @@ macro_rules! gpio {
                     ) -> $PXi<Output<PushPull>> {
                         let offset = 2 * $i;
 
-                        // general purpose output mode
+                        // output mode
                         let mode = 0b01;
                         moder.moder().modify(|r, w| unsafe {
                             w.bits((r.bits() & !(0b11 << offset)) | (mode << offset))
                         });
 
-                        // push pull output
+                        // push pull
                         otyper
                             .otyper()
                             .modify(|r, w| unsafe { w.bits(r.bits() & !(0b1 << $i)) });
 
                         $PXi { _mode: PhantomData }
+                    }
+                }
+
+                impl<MODE> OutputPin for $PXi<Output<MODE>> {
+                    fn set(&mut self) {
+                        // NOTE(unsafe) atomic write to a stateless register
+                        unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << $i)) }
+                    }
+
+                    fn reset(&mut self) {
+                        // NOTE(unsafe) atomic write to a stateless register
+                        unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << (16 + $i))) }
                     }
                 }
                 

@@ -12,6 +12,22 @@ pub trait GpioExt {
     fn split(self, iop: &mut IOP) -> Self::Parts;
 }
 
+
+// TODO Este trait deveria ser importado do embedded hal, mas para seguir
+// a interface definida em C, estou criando um proprio.
+/// Digital Output Pin Interface.
+pub trait OutputPin {
+    fn set (&mut self);
+    fn reset (&mut self);
+}
+
+// TODO Este trait deveria ser importado do embedded hal, mas para seguir
+// a interface definida em C, estou criando um proprio.
+/// Digital Input Pin Interface
+pub trait InputPin {
+    fn read (&self) -> bool ;
+}
+
 /// Input Mode.
 pub struct Input<MODE> {
     _mode: PhantomData<MODE>,
@@ -148,14 +164,6 @@ macro_rules! gpio {
                 _mode: PhantomData<MODE>,
             }
 
-            // TODO Esse trait deveria ser importado do embedded hal, mas para seguir
-            // a interface definida em C, estou criando um proprio.
-            /// Digital Output Pin Interface.
-            pub trait OutputPin {
-                fn set (&mut self);
-                fn reset (&mut self);
-            }
-
             $(
                 /// Pin
                 pub struct $PXi<MODE> {
@@ -220,6 +228,11 @@ macro_rules! gpio {
                     }
                 }
                 
+                impl<MODE> InputPin for $PXi<Input<MODE>> {
+                    fn read(&self) -> bool {
+                        unsafe { (*$GPIOX::ptr()).idr.read().bits() & (1 << $i) == 0 }
+                    }
+                }
             )+
         }   
     };

@@ -1,7 +1,7 @@
 use stm32l0::stm32l0x1;
 
 use hal::{rcc::RccExt, gpio::GpioExt};
-use hal::gpio::gpioa::OutputPin;
+use hal::gpio::{OutputPin, InputPin};
 
 pub fn gpio_test() {
     let hw = stm32l0x1::Peripherals::take().unwrap();
@@ -12,5 +12,13 @@ pub fn gpio_test() {
 
     let mut led = gpioa.pa5.into_push_pull_output(&mut gpioa.moder, &mut gpioa.otyper);
 
-    led.set();
+    let mut button = gpioa.pa4.into_pull_up_input(&mut gpioa.moder, &mut gpioa.pupdr    );
+
+    loop {
+        match button.read() {
+            true => led.set(),
+            false => led.reset(),
+        }
+    }
+
 }

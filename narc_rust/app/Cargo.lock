@@ -53,6 +53,11 @@ dependencies = [
 ]
 
 [[package]]
+name = "cortex-m-semihosting"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "embedded-hal"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -77,7 +82,8 @@ name = "narc-rust"
 version = "0.1.0"
 dependencies = [
  "cortex-m 0.5.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "cortex-m-rt 0.5.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cortex-m-rt 0.6.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cortex-m-semihosting 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "hal 0.1.0",
  "stm32l0 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -128,6 +134,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bare-metal 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "cortex-m 0.5.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cortex-m-rt 0.6.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "vcell 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -172,6 +179,7 @@ dependencies = [
 "checksum cortex-m-rt 0.5.7 (registry+https://github.com/rust-lang/crates.io-index)" = "09fd585ab79330179866e2fdb18ad1083dada4244a72df81ecf63f012aa4f86f"
 "checksum cortex-m-rt 0.6.3 (registry+https://github.com/rust-lang/crates.io-index)" = "9dea4ad5f88b4ccfba2b738ebe42f9452b80481c44aae42c594cc66cf2c5f3c0"
 "checksum cortex-m-rt-macros 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "f96e6af14f78ca987ba5487592a199878a7b17ee65b60e0b4aa563fc00965f4f"
+"checksum cortex-m-semihosting 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "54d46ec4730314a01de4504328ef4ed6b2c51b63815caac4847ac9e70f88c9e5"
 "checksum embedded-hal 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "26944677e4934eb5fb4025501dc0d6cdbcf6bfabd6200fcfee2e7e8eef8c0362"
 "checksum nb 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "69f380b5fe9fab8c0d7a6a99cda23e2cc0463bedb2cbc3aada0813b98496ecdc"
 "checksum proc-macro2 0.4.19 (registry+https://github.com/rust-lang/crates.io-index)" = "ffe022fb8c8bd254524b0b3305906c1921fa37a84a644e29079a9e62200c3901"

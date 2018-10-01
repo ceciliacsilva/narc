@@ -9,4 +9,6 @@ install:
   - rustup target add $TARGET
 
 script:
-  - cd narc_rust && cargo check
+  - cd narc_rust/hal && cargo check
+  - cd ../app && cargo check
+

@@ -1,6 +1,3 @@
-
-
-
 use stm32l0::stm32l0x1;
 
 pub fn gpio_test() {

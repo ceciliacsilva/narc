@@ -10,8 +10,11 @@ extern crate cortex_m;
 extern crate cortex_m_rt;
 extern crate stm32l0;
 
+extern crate hal;
+
 mod aux;
-mod peripherals;
+// mod peripherals;
+mod peripherals_hal;
 
 entry!(main);
 
@@ -20,7 +23,9 @@ fn main() -> ! {
     let x = 42;
     _y = x;
 
-    peripherals::gpio_test();
+    // peripherals::gpio_test();
+
+    peripherals_hal::gpio_test();
 
     // infinite loop; just so we don't leave this stack frame
     loop {

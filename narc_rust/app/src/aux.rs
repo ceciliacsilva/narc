@@ -4,11 +4,15 @@ use core::sync::atomic::{self, Ordering};
 pub use cortex_m::asm::bkpt;
 pub use cortex_m::peripheral::ITM;
 use cortex_m_rt::ExceptionFrame;
+use cortex_m_rt::{exception};
+// use cortex_m_semihosting::hio::{self, HStdout};
+
+// use core::fmt::Write;
 
 
 #[allow(deprecated)]
 #[panic_implementation]
-fn panic(info: &PanicInfo) -> ! {
+fn panic(_info: &PanicInfo) -> ! {
     // let itm = unsafe { &mut *ITM::ptr() };
 
     // iprintln!(&mut itm.stim[0], "{}", info);
@@ -22,20 +26,18 @@ fn panic(info: &PanicInfo) -> ! {
     }
 }
 
-exception!(HardFault, hard_fault);
-
-fn hard_fault(_ef: &ExceptionFrame) -> ! {
+// Don't dead
+// Open  inside
+#[exception]
+fn SysTick() -> ! {
     bkpt();
+    /* static mut STATE: u32 = 0;
 
-    loop {
-        atomic::compiler_fence(Ordering::SeqCst)
-    }
+    *STATE += 1;
+
+    if *STATE > 10 {
+        bkpt();
+    } */
 }
 
-exception!(*, default_handler);
 
-fn default_handler(_irqn: i16) {
-    loop {
-        atomic::compiler_fence(Ordering::SeqCst)
-    }
-}

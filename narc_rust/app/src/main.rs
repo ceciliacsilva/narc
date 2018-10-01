@@ -4,10 +4,11 @@
 #![no_main]
 
 
-#[macro_use]
+// #[macro_use]
 extern crate cortex_m;
-#[macro_use]
+// #[macro_use]
 extern crate cortex_m_rt;
+extern crate cortex_m_semihosting;
 extern crate stm32l0;
 
 extern crate hal;
@@ -16,8 +17,9 @@ mod aux;
 // mod peripherals;
 mod peripherals_hal;
 
-entry!(main);
+use cortex_m_rt::entry;
 
+#[entry]
 fn main() -> ! {
     let _y;
     let x = 42;
@@ -26,7 +28,7 @@ fn main() -> ! {
     // peripherals::gpio_test();
 
     peripherals_hal::gpio_test();
-
+    
     // infinite loop; just so we don't leave this stack frame
     loop {
                 

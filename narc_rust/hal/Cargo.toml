@@ -15,6 +15,7 @@ features = ["stm32l0x1"]
 default-features = false
 version = "0.2.2"
 
+# Not used wet. GPIO. 
 [dependencies.embedded-hal]
 features = ["unproven"]
 version = "0.2.1"

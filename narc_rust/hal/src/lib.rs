@@ -5,3 +5,4 @@ extern crate embedded_hal as hal;
 
 pub mod flash;
 pub mod rcc;
+pub mod gpio;

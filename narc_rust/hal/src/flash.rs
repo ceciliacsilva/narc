@@ -25,6 +25,7 @@ pub struct ACR {
 }
 
 impl ACR {
+    #[allow(dead_code)]
     pub(crate) fn acr(&mut self) -> &flash::ACR {
         unsafe{ &(*FLASH::ptr()).acr }
     }

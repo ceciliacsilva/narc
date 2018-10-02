@@ -6,26 +6,12 @@
 use core::marker::PhantomData;
 use rcc::IOP;
 
+use embedded_hal::digital::{OutputPin, InputPin};
+
 pub trait GpioExt {
     type Parts;
 
     fn split(self, iop: &mut IOP) -> Self::Parts;
-}
-
-
-// TODO Este trait deveria ser importado do embedded hal, mas para seguir
-// a interface definida em C, estou criando um proprio.
-/// Digital Output Pin Interface.
-pub trait OutputPin {
-    fn set (&mut self);
-    fn reset (&mut self);
-}
-
-// TODO Este trait deveria ser importado do embedded hal, mas para seguir
-// a interface definida em C, estou criando um proprio.
-/// Digital Input Pin Interface
-pub trait InputPin {
-    fn read (&self) -> bool ;
 }
 
 /// Input Mode.
@@ -100,8 +86,8 @@ macro_rules! gpio {
                         moder: MODER { _0: () },
                         otyper: OTYPER { _0: () },
                         pupdr: PUPDR { _0: () },
-                        afrh: AFRH { _0: () },
                         afrl: AFRL { _0: () },
+                        afrh: AFRH { _0: () },
                         $(
                             $pxi: $PXi { _mode: PhantomData },
                         )+
@@ -214,22 +200,48 @@ macro_rules! gpio {
 
                         $PXi { _mode: PhantomData }
                     }
+
+                    pub fn into_push_pull_af2(
+                        self,
+                        moder: &mut MODER,
+                        afrl: &mut AFRL,
+                    ) -> $PXi<AF2> {
+                        let offset = 2 * $i;
+
+                        // alternative function
+                        let mode = 0b10;
+                        moder.moder().modify(|r, w| unsafe{
+                            w.bits((r.bits() & !(0b11 << offset)) | (mode << offset))
+                        });
+
+                        let af = 2;
+                        let offset = 4 * ($i % 8);
+                        afrl.afr().modify(|r, w| unsafe {
+                            w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
+                        });
+
+                        $PXi { _mode: PhantomData }
+                    }
                 }
 
                 impl<MODE> OutputPin for $PXi<Output<MODE>> {
-                    fn set(&mut self) {
+                    fn set_high(&mut self) {
                         // NOTE(unsafe) atomic write to a stateless register
                         unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << $i)) }
                     }
 
-                    fn reset(&mut self) {
+                    fn set_low(&mut self) {
                         // NOTE(unsafe) atomic write to a stateless register
                         unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << (16 + $i))) }
                     }
                 }
                 
                 impl<MODE> InputPin for $PXi<Input<MODE>> {
-                    fn read(&self) -> bool {
+                    fn is_high(&self) -> bool {
+                        !self.is_low()
+                    }
+
+                    fn is_low(&self) -> bool {
                         unsafe { (*$GPIOX::ptr()).idr.read().bits() & (1 << $i) == 0 }
                     }
                 }

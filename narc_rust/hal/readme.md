@@ -1,20 +1,22 @@
 ## Tasks list
 
 ### RCC
-- [x] IOP
-- [] AHB
-- [] APB1
-- [] APB2
-- [] CFGR
+- [X] IOP
+- [ ] AHB
+- [X] APB1
+- [ ] APB2
+- [ ] CFGR
 
 ### GPIO
-- [] traits embedded hal
+- [x] traits embedded hal
 - [x] pull up
 - [] pull down
 - [x] push pull
 - [] open drain
 - [] Afs
+    - [x] AF2
 - [] GPIOB, GPIOC...
+- [] Rever os into_pu...
 
 ### AFIO
 - [] remap

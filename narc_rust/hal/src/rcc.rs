@@ -10,7 +10,8 @@ pub trait RccExt {
 impl RccExt for RCC {
     fn constrain(self) -> Rcc {
         Rcc {
-            iop: IOP { _0: () }
+            iop: IOP { _0: () },
+            apb1: APB1 { _0: () },
         }
     }
 }
@@ -18,7 +19,7 @@ impl RccExt for RCC {
 // TODO. It is not complete.
 pub struct Rcc {
     // TODO AHB
-    // TODO APB1
+    pub apb1: APB1,
     // TODO APB2
     pub iop: IOP,
     // TODO Clock Configuration Register CFGR
@@ -35,5 +36,19 @@ impl IOP {
 
     pub(crate) fn rstr (&mut self) -> &rcc::IOPRSTR {
         unsafe { &(*RCC::ptr()).ioprstr }
+    }
+}
+
+pub struct APB1 {
+    _0: (),
+}
+
+impl APB1 {
+    pub(crate) fn enr (&mut self) -> &rcc::APB1ENR {
+        unsafe { &(*RCC::ptr()).apb1enr }
+    }
+
+    pub(crate) fn rstr (&mut self) -> &rcc::APB1RSTR {
+        unsafe { &(*RCC::ptr()).apb1rstr }
     }
 }

@@ -10,7 +10,6 @@ extern crate cortex_m;
 extern crate cortex_m_rt;
 extern crate cortex_m_semihosting;
 extern crate stm32l0;
-
 extern crate hal;
 
 mod aux;

@@ -18,6 +18,9 @@
 - [] GPIOB, GPIOC...
 - [] Rever os into_pu...
 
+### Time
+- [] 
+
 ### AFIO
 - [] remap
 

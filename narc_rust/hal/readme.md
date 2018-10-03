@@ -10,24 +10,25 @@
 ### GPIO
 - [x] traits embedded hal
 - [x] pull up
-- [] pull down
+- [ ] pull down
 - [x] push pull
-- [] open drain
-- [] Afs
-    - [x] AF2
-- [] GPIOB, GPIOC...
-- [] Rever os into_pu...
+- [ ] open drain
+- [ ] Afs
+    - [x] AF5 - PA5 TIM2_ch1
+- [ ] GPIOB, GPIOC...
+- [ ] Rever os into_pu...
 
 ### Time
-- [] 
+- [ ] 
 
 ### AFIO
-- [] remap
+    Pensar como abstrair isso...
+- [ ] remap
 
 ### PWM
-- [] macros
+- [ ] macros
 ...
 
 ### Exception
-- [] Systick
+- [ ] Systick
 

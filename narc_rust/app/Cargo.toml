@@ -18,3 +18,6 @@ features = ["stm32l0x1", "rt"]
 [dependencies.hal]
 version = "0.1.0"
 path = "../hal"
+
+[dependencies.embedded-hal]
+version = "0.2.1"

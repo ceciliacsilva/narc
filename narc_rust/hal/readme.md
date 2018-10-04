@@ -5,7 +5,7 @@
 - [ ] AHB
 - [X] APB1
 - [ ] APB2
-- [ ] CFGR
+- [X] CFGR (conferir)
 
 ### GPIO
 - [x] traits embedded hal
@@ -13,7 +13,7 @@
 - [ ] pull down
 - [x] push pull
 - [ ] open drain
-- [ ] Afs
+- [ ] Afs (mudar isso)
     - [x] AF5 - PA5 TIM2_ch1
 - [ ] GPIOB, GPIOC...
 - [ ] Rever os into_pu...
@@ -26,7 +26,8 @@
 - [ ] remap
 
 ### PWM
-- [ ] macros
+- [ ] Pwm
+- [ ] PwmPin
 ...
 
 ### Exception

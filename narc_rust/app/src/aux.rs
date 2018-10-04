@@ -3,7 +3,7 @@ use core::sync::atomic::{self, Ordering};
 
 pub use cortex_m::asm::bkpt;
 pub use cortex_m::peripheral::ITM;
-use cortex_m_rt::ExceptionFrame;
+// use cortex_m_rt::ExceptionFrame;
 use cortex_m_rt::{exception};
 // use cortex_m_semihosting::hio::{self, HStdout};
 
@@ -28,6 +28,14 @@ fn panic(_info: &PanicInfo) -> ! {
 
 // Don't dead
 // Open  inside
+
+#[exception]
+fn DefaultHandler(_irqn: i16) -> ! {
+    bkpt();
+    loop {}
+}
+
+/* 
 #[exception]
 fn SysTick() -> ! {
     bkpt();
@@ -38,6 +46,10 @@ fn SysTick() -> ! {
     if *STATE > 10 {
         bkpt();
     } */
+    loop {
+        atomic::compiler_fence(Ordering::SeqCst)
+    }
 }
 
 
+ */

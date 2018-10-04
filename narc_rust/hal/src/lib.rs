@@ -8,5 +8,5 @@ extern crate cast;
 pub mod flash;
 pub mod rcc;
 pub mod gpio;
-// pub mod time;
+pub mod time;
 pub mod pwm;

@@ -201,11 +201,13 @@ macro_rules! gpio {
                         $PXi { _mode: PhantomData }
                     }
 
-                    pub fn into_push_pull_af5(
+                    // TODO Always returning AF0
+                    pub fn into_push_pull_af(
                         self,
                         moder: &mut MODER,
                         afrl: &mut AFRL,
-                    ) -> $PXi<AF2> {
+                        afx: u8
+                    ) -> $PXi<AF5> { 
                         let offset = 2 * $i;
 
                         // alternative function
@@ -214,7 +216,9 @@ macro_rules! gpio {
                             w.bits((r.bits() & !(0b11 << offset)) | (mode << offset))
                         });
 
-                        let af = 5;
+                        assert!(afx < 15);
+
+                        let af = afx as u32;
                         let offset = 4 * ($i % 8);
                         afrl.afr().modify(|r, w| unsafe {
                             w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))

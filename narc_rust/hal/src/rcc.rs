@@ -6,7 +6,7 @@ use core::cmp;
 use cast::u32;
 
 use flash::ACR;
-// use time::Hertz;
+use time::Hertz;
 
 pub trait RccExt {
     /// Constrains the 'Rcc' peripheral so it play nicely with other abstractions.
@@ -18,6 +18,12 @@ impl RccExt for RCC {
         Rcc {
             iop: IOP { _0: () },
             apb1: APB1 { _0: () },
+            cfgr: CFGR {
+                hclk: None,
+                pclk1: None,
+                pclk2: None,
+                sysclk: None,
+            },
         }
     }
 }
@@ -28,7 +34,7 @@ pub struct Rcc {
     pub apb1: APB1,
     // TODO APB2
     pub iop: IOP,
-    // TODO Clock Configuration Register CFGR
+    pub cfgr: CFGR,
 }
 
 pub struct IOP {
@@ -58,8 +64,8 @@ impl APB1 {
         unsafe { &(*RCC::ptr()).apb1rstr }
     }
 }
-/* 
-const HSI: u32 = 8_000_000; // Hz
+
+const HSI: u32 = 16_000_000; // Hz
 
 pub struct CFGR {
     hclk: Option<u32>,
@@ -103,6 +109,7 @@ impl CFGR {
 
     pub fn freeze(self, acr: &mut ACR) -> Clocks {
         // TODO ADC & USB clocks
+        // TODO verify asserts.
 
         let pllmul = (4 * self.sysclk.unwrap_or(HSI) + HSI) / HSI / 2;
         let pllmul = cmp::min(cmp::max(pllmul, 2), 16);
@@ -119,7 +126,7 @@ impl CFGR {
         let hpre_bits = self.hclk
             .map(|hclk| match sysclk / hclk {
                 0 => unreachable!(),
-                1 => 0b0111,
+                1 => 0b0111, //0xxx: SYSCLK not divided
                 2 => 0b1000,
                 3...5 => 0b1001,
                 6...11 => 0b1010,
@@ -168,15 +175,30 @@ impl CFGR {
         assert!(pclk2 < 72_000_000);
 
         // adjust flash wait states
+        // unsafe {
+        //     acr.acr().write(|w| {
+        //         w.latency().bits(if sysclk <= 24_000_000 {
+        //             0b000
+        //         } else if sysclk <= 48_000_000 {
+        //             0b001
+        //         } else {
+        //             0b010
+        //         })
+        //     })
+        // }
+
+        //Range 1 - 1.65 V - 1.95 V
+        //Table 13
         unsafe {
-            acr.acr().write(|w| {
-                w.latency().bits(if sysclk <= 24_000_000 {
-                    0b000
-                } else if sysclk <= 48_000_000 {
-                    0b001
-                } else {
-                    0b010
-                })
+            acr.acr().write (|w| {
+                w.latency().bit(
+                    if sysclk <= 16_000_000 {
+                        //0b0
+                        false
+                    } else {
+                        //0b1
+                        true
+                    })
             })
         }
 
@@ -186,9 +208,10 @@ impl CFGR {
 
             rcc.cfgr.write(|w| unsafe { w.pllmul().bits(pllmul_bits) });
 
-            rcc.cr.write(|w| w.pllon().enabled());
+            rcc.cr.write(|w| w.pllon().set_bit());
 
-            while rcc.cr.read().pllrdy().is_unlocked() {}
+            //is_unclecked
+            while rcc.cr.read().pllrdy().bit() {}
 
             rcc.cfgr.modify(|_, w| unsafe {
                 w.ppre2()
@@ -198,7 +221,8 @@ impl CFGR {
                     .hpre()
                     .bits(hpre_bits)
                     .sw()
-                    .pll()
+                    // .pll()
+                    .bits(0b11)
             });
         } else {
             // use HSI as source
@@ -211,7 +235,8 @@ impl CFGR {
                     .hpre()
                     .bits(hpre_bits)
                     .sw()
-                    .hsi()
+                    // .hsi()
+                    .bits(0b01)
             });
         }
 
@@ -263,4 +288,3 @@ impl Clocks {
         self.sysclk
     }
 }
- */

@@ -5,11 +5,11 @@
 use stm32l0::stm32l0x1::{FLASH, flash};
 
 pub trait FlashExt {
-    fn constraint(self) -> Parts;
+    fn constrain(self) -> Parts;
 }
 
 impl FlashExt for FLASH {
-    fn constraint(self) -> Parts {
+    fn constrain(self) -> Parts {
         Parts {
             acr: ACR { _0: ()},
         }

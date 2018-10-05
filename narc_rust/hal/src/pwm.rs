@@ -152,6 +152,8 @@ macro_rules! hal {
                 let arr = arr as u32;
                 tim.arr.write(|w| unsafe{w.bits(arr)} );
                 
+                //setar duty para 0
+
                 unsafe { mem::uninitialized() }
             }
 

@@ -15,7 +15,7 @@ pub fn gpio_test() {
     let mut flash = hw.FLASH.constrain();
 
     let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
-    let clocks = rcc.cfgr.freeze(&mut flash.acr);
+    let clocks = rcc.cfgr.freeze(&mut flash.acr);//system clock config
 
     let c1 = gpioa.pa5.into_push_pull_af(&mut gpioa.moder, &mut gpioa.afrl, 5);
 

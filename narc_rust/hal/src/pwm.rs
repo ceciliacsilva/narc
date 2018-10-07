@@ -5,12 +5,10 @@ use cast::{u16, u32};
 use embedded_hal::{PwmPin};
 use stm32l0::stm32l0x1::{TIM2};
 
-use gpio::gpioa::{/* PA0, PA1, PA2, PA3, */ PA5};
-use gpio::{AF2, PushPull, AF5};
+use gpio::gpioa::{PA0, PA1, PA2, PA3, PA5, PA15};
+use gpio::{AF2, AF5};
 use rcc::{APB1, Clocks};
 use time::Hertz;
-
-use cortex_m::asm::bkpt;
 
 pub trait Pins<TIM> {
     const C1: bool;
@@ -26,6 +24,23 @@ impl Pins<TIM2> for (PA5<AF5>) {
     const C3: bool = false;
     const C4: bool = false;
     type Channels = Pwm<TIM2, C1>;
+}
+
+impl Pins<TIM2> for (PA15<AF5>) {
+    const C1: bool = true;
+    const C2: bool = false;
+    const C3: bool = false;
+    const C4: bool = false;
+    type Channels = Pwm<TIM2, C1>;
+}
+
+impl Pins<TIM2> for
+(PA0<AF2>, PA1<AF2>, PA2<AF2>, PA3<AF2>){
+    const C1: bool= true;
+    const C2: bool= true;
+    const C3: bool= true;
+    const C4: bool= true;
+    type Channels = (Pwm<TIM2, C1>, Pwm<TIM2, C2>, Pwm<TIM2, C3>, Pwm<TIM2, C4>);
 }
 
 pub trait PwmExt: Sized {
@@ -106,11 +121,7 @@ macro_rules! hal {
                         .modify(|_, w| unsafe{ w.oc4pe().set_bit().oc4m().bits(pwm1) });
                 }
 
-                tim.cr1.write(|w| unsafe {
-                        w
-                        .cen()
-                        .set_bit()
-                }); 
+                tim.cr1.write(|w| w.cen().set_bit()); 
 
                 tim.egr.write(|w| w.ug().set_bit());
                 

@@ -20,7 +20,7 @@ pub fn gpio_test() {
     // let mut b = gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
     // b.set_high();
 
-    let c1 = gpioa.pa5.into_alternate_af5(&mut gpioa.moder, &mut gpioa.afrl);
+    let c1 = gpioa.pa5.into_alternate(&mut gpioa.moder).af5(&mut gpioa.afrl);
 
     // let button = gpioa.pa4.into_pull_up_input(&mut gpioa.moder, &mut gpioa.pupdr);
 

@@ -2,7 +2,6 @@
 
 use stm32l0::stm32l0x1::{RCC, rcc};
 
-use core::cmp;
 use cast::u32;
 
 use flash::ACR;
@@ -107,9 +106,9 @@ impl CFGR {
         self
     }
 
-    pub fn freeze(self, acr: &mut ACR) -> Clocks {
+    pub fn freeze(self, _acr: &mut ACR) -> Clocks {
         // MSI
-        
+
         let sysclk = 2_097_000;
         let hclk = 2_097_000;
 
@@ -159,7 +158,7 @@ impl CFGR {
                 _ => 0b11, //max value
             };
 
-        let sysclk = (((HSI / 4) * pllmul) / plldiv);
+        let sysclk = ((HSI / 4) * pllmul) / plldiv;
         
         assert!(sysclk <= 32_000_000);
 
@@ -233,19 +232,17 @@ impl CFGR {
 
             //Range 1 - 1.65 V - 1.95 V
             //Table 13
-            unsafe {
-                acr.acr().write (|w| {
-                    w.latency().bit(
-                        if sysclk <= 16_000_000 {
-                            //0b0
-                            false
-                        } else {
-                            //0b1
-                            true
-                        })
-                })
-            }
-
+            acr.acr().write (|w| {
+                w.latency().bit(
+                    if sysclk <= 16_000_000 {
+                        //0b0
+                        false
+                    } else {
+                        //0b1
+                        true
+                    })
+            });
+        
             rcc.cfgr.write(|w| unsafe { w.pllmul().bits(pllmul_bits) });
             rcc.cfgr.write(|w| unsafe { w.plldiv().bits(plldiv_bits) });
 

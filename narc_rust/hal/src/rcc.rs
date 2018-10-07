@@ -108,6 +108,29 @@ impl CFGR {
     }
 
     pub fn freeze(self, acr: &mut ACR) -> Clocks {
+        // MSI
+        
+        let sysclk = 2_097_000;
+        let hclk = 2_097_000;
+
+        let ppre1 = 1;
+        let ppre2 = 1;
+            
+        let pclk1 =  2_097_000;
+        let pclk2 =  2_097_000;
+
+        Clocks {
+            hclk: Hertz(hclk),
+            pclk1: Hertz(pclk1),
+            pclk2: Hertz(pclk2),
+            ppre1,
+            ppre2,
+            sysclk: Hertz(sysclk),
+        }
+    }
+
+    // PLL is not working. Is never activated.
+    pub fn freeze_old(self, acr: &mut ACR) -> Clocks {
         // TODO ADC & USB clocks
         // TODO verify asserts.
 
@@ -210,24 +233,21 @@ impl CFGR {
 
             //Range 1 - 1.65 V - 1.95 V
             //Table 13
-            // unsafe {
-            //     acr.acr().write (|w| {
-            //         w.latency().bit(
-            //             if sysclk <= 16_000_000 {
-            //                 //0b0
-            //                 false
-            //             } else {
-            //                 //0b1
-            //                 true
-            //             })
-            //     })
-            // }
+            unsafe {
+                acr.acr().write (|w| {
+                    w.latency().bit(
+                        if sysclk <= 16_000_000 {
+                            //0b0
+                            false
+                        } else {
+                            //0b1
+                            true
+                        })
+                })
+            }
 
-            acr.acr().write(|w| {
-                    w.latency().bit(true) });
-
-            rcc.cfgr.write(|w| unsafe { w.pllmul().bits(0b0110) });
-            rcc.cfgr.write(|w| unsafe { w.plldiv().bits(0b10) });
+            rcc.cfgr.write(|w| unsafe { w.pllmul().bits(pllmul_bits) });
+            rcc.cfgr.write(|w| unsafe { w.plldiv().bits(plldiv_bits) });
 
             rcc.cr.write(|w| w.pllon().set_bit());
 
@@ -236,18 +256,18 @@ impl CFGR {
 
             rcc.cfgr.write(|w| unsafe {
                     w
-                    // .ppre2()
-                    // .bits(ppre2_bits)
-                    // .ppre1()
-                    // .bits(ppre1_bits)
-                    // .hpre()
-                    // .bits(hpre_bits)
+                    .ppre2()
+                    .bits(ppre2_bits)
+                    .ppre1()
+                    .bits(ppre1_bits)
+                    .hpre()
+                    .bits(hpre_bits)
                     .sw()
                     // .pll()
                     .bits(pllsw)
             });
 
-            while rcc.cfgr.read().sws().bits() != 0b00 {}         
+            while rcc.cfgr.read().sws().bits() != pllsw {}         
         } else {
             // use HSI as source
             // nao foi verificado

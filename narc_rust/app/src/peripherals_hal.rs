@@ -17,26 +17,26 @@ pub fn gpio_test() {
     let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
     let clocks = rcc.cfgr.freeze(&mut flash.acr);//system clock config
 
-    let mut b = gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
-    b.set_high();
+    // let mut b = gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
+    // b.set_high();
 
-    // let c1 = gpioa.pa5.into_alternate_af5(&mut gpioa.moder, &mut gpioa.afrl);
+    let c1 = gpioa.pa5.into_alternate_af5(&mut gpioa.moder, &mut gpioa.afrl);
 
     // let button = gpioa.pa4.into_pull_up_input(&mut gpioa.moder, &mut gpioa.pupdr);
 
-    // let mut pwm = hw.TIM2
-    //                 .pwm(
-    //                     c1,
-    //                     1.hz(),
-    //                     clocks,
-    //                     &mut rcc.apb1,
-    //                 );
+    let mut pwm = hw.TIM2
+                    .pwm(
+                        c1,
+                        1.hz(),
+                        clocks,
+                        &mut rcc.apb1,
+                    );
 
     
-    // let max = pwm.get_max_duty();
-    // pwm.enable();
+    let max = pwm.get_max_duty();
+    pwm.enable();
 
-    // pwm.set_duty(max / 2);
+    pwm.set_duty(max / 2);
 
     // loop{
     //     match button.is_high() {

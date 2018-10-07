@@ -5,12 +5,10 @@ use cast::{u16, u32};
 use embedded_hal::{PwmPin};
 use stm32l0::stm32l0x1::{TIM2};
 
-use gpio::gpioa::{PA0, PA1, PA2, PA3, PA5};
-use gpio::{AF2, PushPull, AF5};
+use gpio::gpioa::{PA0, PA1, PA2, PA3, PA5, PA15};
+use gpio::{AF2, AF5};
 use rcc::{APB1, Clocks};
 use time::Hertz;
-
-use cortex_m::asm::bkpt;
 
 pub trait Pins<TIM> {
     const C1: bool;
@@ -20,27 +18,29 @@ pub trait Pins<TIM> {
     type Channels;
 }
 
-// impl Pins<TIM2>
-//     for (
-//         PA0<AF2>,
-//         PA1<AF2>,
-//         PA2<AF2>,
-//         PA3<AF2>,
-//     )
-// {
-//     const C1: bool = true;
-//     const C2: bool = true;
-//     const C3: bool = true;
-//     const C4: bool = true;
-//     type Channels = (Pwm<TIM2, C1>, Pwm<TIM2, C2>, Pwm<TIM2, C3>, Pwm<TIM2, C4>);
-// }
-
 impl Pins<TIM2> for (PA5<AF5>) {
     const C1: bool = true;
     const C2: bool = false;
     const C3: bool = false;
     const C4: bool = false;
     type Channels = Pwm<TIM2, C1>;
+}
+
+impl Pins<TIM2> for (PA15<AF5>) {
+    const C1: bool = true;
+    const C2: bool = false;
+    const C3: bool = false;
+    const C4: bool = false;
+    type Channels = Pwm<TIM2, C1>;
+}
+
+impl Pins<TIM2> for
+(PA0<AF2>, PA1<AF2>, PA2<AF2>, PA3<AF2>){
+    const C1: bool= true;
+    const C2: bool= true;
+    const C3: bool= true;
+    const C4: bool= true;
+    type Channels = (Pwm<TIM2, C1>, Pwm<TIM2, C2>, Pwm<TIM2, C3>, Pwm<TIM2, C4>);
 }
 
 pub trait PwmExt: Sized {
@@ -99,44 +99,29 @@ macro_rules! hal {
                 apb.rstr().modify(|_, w| w.$timXrst().set_bit());
                 apb.rstr().modify(|_, w| w.$timXrst().clear_bit());
 
+                let pwm1 = 0b110;
+
                 if PINS::C1 {
                     tim.ccmr1_output
-                        // .modify(|_, w| w.oc1pe().set_bit().oc1m().pwm1());
-                        .modify(|_, w| unsafe{ w.oc1pe().set_bit().oc1m().bits(0b110) });
+                        .modify(|_, w| unsafe{ w.oc1pe().set_bit().oc1m().bits(pwm1) });
                 }
 
                 if PINS::C2 {
                     tim.ccmr1_output
-                        // .modify(|_, w| w.oc2pe().set_bit().oc2m().pwm1());
-                        .modify(|_, w| unsafe{ w.oc2pe().set_bit().oc2m().bits(0b110) });
+                        .modify(|_, w| unsafe{ w.oc2pe().set_bit().oc2m().bits(pwm1) });
                 }
 
                 if PINS::C3 {
                     tim.ccmr2_output
-                        // .modify(|_, w| w.oc3pe().set_bit().oc3m().pwm1());
-                        .modify(|_, w| unsafe{ w.oc3pe().set_bit().oc3m().bits(0b110) });
+                        .modify(|_, w| unsafe{ w.oc3pe().set_bit().oc3m().bits(pwm1) });
                 }
 
                 if PINS::C4 {
                     tim.ccmr2_output
-                        // .modify(|_, w| w.oc4pe().set_bit().oc4m().pwm1());
-                        .modify(|_, w| unsafe{ w.oc4pe().set_bit().oc4m().bits(0b110) });
+                        .modify(|_, w| unsafe{ w.oc4pe().set_bit().oc4m().bits(pwm1) });
                 }
 
-                tim.cr1.write(|w| unsafe {
-                        w
-                    // .cms()
-                    //     .bits(0b00)
-                        // .dir()
-                        // .set_bit()
-                        // // .up()
-                        // .opm()
-                        // .set_bit()
-                        // // .continuous()
-                        .cen()
-                        .set_bit()
-                        // .enabled()
-                }); 
+                tim.cr1.write(|w| w.cen().set_bit()); 
 
                 tim.egr.write(|w| w.ug().set_bit());
                 
@@ -151,8 +136,6 @@ macro_rules! hal {
                 let arr = u16(ticks / u32(psc + 1)).unwrap();
                 let arr = arr as u32;
                 tim.arr.write(|w| unsafe{w.bits(arr)} );
-                
-                //setar duty para 0
 
                 unsafe { mem::uninitialized() }
             }
@@ -161,11 +144,12 @@ macro_rules! hal {
                 type Duty = u16;
 
                 fn disable(&mut self) {
-                    unsafe { (*$TIMX::ptr()).ccer.modify(|_, w| w.cc1e().set_bit()) };
+                    unsafe { (*$TIMX::ptr()).ccer.modify(|_, w| w.cc1e().clear_bit()) };
                 }
 
                 fn enable(&mut self) {
                     unsafe { (*$TIMX::ptr()).ccer.modify(|_, w| w.cc1e().set_bit()) };
+                    unsafe { (*$TIMX::ptr()).ccr1.modify(|_, w| w.bits(0)) };
                 }
 
                 fn get_duty(&self) -> u16 {
@@ -191,10 +175,11 @@ macro_rules! hal {
 
                 fn enable(&mut self) {
                     unsafe { (*$TIMX::ptr()).ccer.modify(|_, w| w.cc2e().set_bit()) };
+                    unsafe { (*$TIMX::ptr()).ccr2.modify(|_, w| w.bits(0)) };
                 }
 
                 fn get_duty(&self) -> u16 {
-                    (unsafe { (*$TIMX::ptr()).ccr1.read().bits() }) as u16
+                    (unsafe { (*$TIMX::ptr()).ccr2.read().bits() }) as u16
                 }
 
                 fn get_max_duty(&self) -> u16 {
@@ -203,7 +188,7 @@ macro_rules! hal {
 
                 fn set_duty(&mut self, duty: u16) {
                     let duty = duty as u32;
-                    unsafe { (*$TIMX::ptr()).ccr1.modify(|_, w| w.bits(duty)) };
+                    unsafe { (*$TIMX::ptr()).ccr2.modify(|_, w| w.bits(duty)) };
                 }
             }
 
@@ -216,10 +201,11 @@ macro_rules! hal {
 
                 fn enable(&mut self) {
                     unsafe { (*$TIMX::ptr()).ccer.modify(|_, w| w.cc3e().set_bit()) };
+                    unsafe { (*$TIMX::ptr()).ccr3.modify(|_, w| w.bits(0)) };
                 }
 
                 fn get_duty(&self) -> u16 {
-                    (unsafe { (*$TIMX::ptr()).ccr1.read().bits() }) as u16
+                    (unsafe { (*$TIMX::ptr()).ccr3.read().bits() }) as u16
                 }
 
                 fn get_max_duty(&self) -> u16 {
@@ -228,7 +214,7 @@ macro_rules! hal {
 
                 fn set_duty(&mut self, duty: u16) {
                     let duty = duty as u32;
-                    unsafe { (*$TIMX::ptr()).ccr1.modify(|_, w| w.bits(duty)) };
+                    unsafe { (*$TIMX::ptr()).ccr3.modify(|_, w| w.bits(duty)) };
                 }
             }
 
@@ -241,10 +227,11 @@ macro_rules! hal {
 
                 fn enable(&mut self) {
                     unsafe { (*$TIMX::ptr()).ccer.modify(|_, w| w.cc4e().set_bit()) };
+                    unsafe { (*$TIMX::ptr()).ccr4.modify(|_, w| w.bits(0)) };
                 }
 
                 fn get_duty(&self) -> u16 {
-                    (unsafe { (*$TIMX::ptr()).ccr1.read().bits() }) as u16
+                    (unsafe { (*$TIMX::ptr()).ccr4.read().bits() }) as u16
                 }
 
                 fn get_max_duty(&self) -> u16 {
@@ -253,7 +240,7 @@ macro_rules! hal {
 
                 fn set_duty(&mut self, duty: u16) {
                     let duty = duty as u32;
-                    unsafe { (*$TIMX::ptr()).ccr1.modify(|_, w| w.bits(duty)) };
+                    unsafe { (*$TIMX::ptr()).ccr4.modify(|_, w| w.bits(duty)) };
                 }
             }
         )+

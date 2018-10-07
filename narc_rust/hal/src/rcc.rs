@@ -111,17 +111,34 @@ impl CFGR {
         // TODO ADC & USB clocks
         // TODO verify asserts.
 
-        let pllmul = (4 * self.sysclk.unwrap_or(HSI) + HSI) / HSI / 2;
-        let pllmul = cmp::min(cmp::max(pllmul, 2), 16);
-        let pllmul_bits = if pllmul == 2 {
-            None
-        } else {
-            Some(pllmul as u8 - 2)
-        };
+        let pllmul: u32 = 24;
+        let plldiv: u32 = 3;
 
-        let sysclk = pllmul * HSI / 2;
+        let pllmul_bits = 
+            match pllmul {
+                3  => Some(0b0000),
+                4  => Some(0b0001),
+                6  => Some(0b0010),
+                8  => Some(0b0011),
+                12 => Some(0b0100),
+                16 => Some(0b0101),
+                24 => Some(0b0110),
+                32 => Some(0b0111),
+                48 => Some(0b1000),
+                _  => None, //min value
+            };
 
-        assert!(sysclk < 72_000_000);
+        let plldiv_bits =
+            match plldiv {
+                2 => 0b01,
+                3 => 0b10,
+                4 => 0b11,
+                _ => 0b11, //max value
+            };
+
+        let sysclk = (((HSI / 4) * pllmul) / plldiv);
+        
+        assert!(sysclk <= 32_000_000);
 
         let hpre_bits = self.hclk
             .map(|hclk| match sysclk / hclk {
@@ -140,7 +157,7 @@ impl CFGR {
 
         let hclk = sysclk / (1 << (hpre_bits - 0b0111));
 
-        assert!(hclk < 72_000_000);
+        assert!(hclk <= 32_000_000);
 
         let ppre1_bits = self.pclk1
             .map(|pclk1| match hclk / pclk1 {
@@ -156,7 +173,7 @@ impl CFGR {
         let ppre1 = 1 << (ppre1_bits - 0b011);
         let pclk1 = hclk / u32(ppre1);
 
-        assert!(pclk1 <= 36_000_000);
+        assert!(pclk1 <= 32_000_000);
 
         let ppre2_bits = self.pclk2
             .map(|pclk2| match hclk / pclk2 {
@@ -172,60 +189,68 @@ impl CFGR {
         let ppre2 = 1 << (ppre2_bits - 0b011);
         let pclk2 = hclk / u32(ppre2);
 
-        assert!(pclk2 < 72_000_000);
-
-        // adjust flash wait states
-        // unsafe {
-        //     acr.acr().write(|w| {
-        //         w.latency().bits(if sysclk <= 24_000_000 {
-        //             0b000
-        //         } else if sysclk <= 48_000_000 {
-        //             0b001
-        //         } else {
-        //             0b010
-        //         })
-        //     })
-        // }
-
-        //Range 1 - 1.65 V - 1.95 V
-        //Table 13
-        unsafe {
-            acr.acr().write (|w| {
-                w.latency().bit(
-                    if sysclk <= 16_000_000 {
-                        //0b0
-                        false
-                    } else {
-                        //0b1
-                        true
-                    })
-            })
-        }
+        assert!(pclk2 <= 32_000_000);
 
         let rcc = unsafe { &*RCC::ptr() };
         if let Some(pllmul_bits) = pllmul_bits {
             // use PLL as source
+            let pllsw = 0b11;
 
-            rcc.cfgr.write(|w| unsafe { w.pllmul().bits(pllmul_bits) });
+            if rcc.cfgr.read().sws().bits() == pllsw {
+                let hsisw = 0b01;
+                rcc.cfgr.modify(|_, w| unsafe {
+                                    w.sw().bits(hsisw)});
+                
+                while rcc.cfgr.read().sws().bits() != hsisw {}
+            }
+
+            rcc.cr.write(|w| w.pllon().clear_bit());
+
+            while rcc.cr.read().pllrdy().bit() != false {}
+
+            //Range 1 - 1.65 V - 1.95 V
+            //Table 13
+            // unsafe {
+            //     acr.acr().write (|w| {
+            //         w.latency().bit(
+            //             if sysclk <= 16_000_000 {
+            //                 //0b0
+            //                 false
+            //             } else {
+            //                 //0b1
+            //                 true
+            //             })
+            //     })
+            // }
+
+            acr.acr().write(|w| {
+                    w.latency().bit(true) });
+
+            rcc.cfgr.write(|w| unsafe { w.pllmul().bits(0b0110) });
+            rcc.cfgr.write(|w| unsafe { w.plldiv().bits(0b10) });
 
             rcc.cr.write(|w| w.pllon().set_bit());
 
             //is_unclecked
-            while rcc.cr.read().pllrdy().bit() {}
+            while rcc.cr.read().pllrdy().bit() == true {}
 
-            rcc.cfgr.modify(|_, w| unsafe {
-                w.ppre2()
-                    .bits(ppre2_bits)
-                    .ppre1()
-                    .bits(ppre1_bits)
-                    .hpre()
-                    .bits(hpre_bits)
+            rcc.cfgr.write(|w| unsafe {
+                    w
+                    // .ppre2()
+                    // .bits(ppre2_bits)
+                    // .ppre1()
+                    // .bits(ppre1_bits)
+                    // .hpre()
+                    // .bits(hpre_bits)
                     .sw()
                     // .pll()
-                    .bits(0b11)
+                    .bits(pllsw)
             });
+
+            while rcc.cfgr.read().sws().bits() != 0b00 {}         
         } else {
             // use HSI as source
+            // nao foi verificado
 
             rcc.cfgr.write(|w| unsafe {
                 w.ppre2()

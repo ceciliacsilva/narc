@@ -5,7 +5,7 @@ use cast::{u16, u32};
 use embedded_hal::{PwmPin};
 use stm32l0::stm32l0x1::{TIM2};
 
-use gpio::gpioa::{PA0, PA1, PA2, PA3, PA5};
+use gpio::gpioa::{/* PA0, PA1, PA2, PA3, */ PA5};
 use gpio::{AF2, PushPull, AF5};
 use rcc::{APB1, Clocks};
 use time::Hertz;
@@ -146,13 +146,15 @@ macro_rules! hal {
                 
                 let psc = u16(ticks / (1 << 16)).unwrap();
                 let psc = psc as u32;
-                tim.psc.write(|w| unsafe{w.bits(psc)} );
+                tim.psc.write(|w| unsafe{w.bits(1599)} );
                 
                 let arr = u16(ticks / u32(psc + 1)).unwrap();
                 let arr = arr as u32;
-                tim.arr.write(|w| unsafe{w.bits(arr)} );
-                
+                tim.arr.write(|w| unsafe{w.bits(1999)} );
+
+                tim.ccer.modify(|_, w| w.cc1e().set_bit());
                 //setar duty para 0
+                tim.ccr1.modify(|_, w| unsafe { w.bits(0) });
 
                 unsafe { mem::uninitialized() }
             }
@@ -161,7 +163,7 @@ macro_rules! hal {
                 type Duty = u16;
 
                 fn disable(&mut self) {
-                    unsafe { (*$TIMX::ptr()).ccer.modify(|_, w| w.cc1e().set_bit()) };
+                    unsafe { (*$TIMX::ptr()).ccer.modify(|_, w| w.cc1e().clear_bit()) };
                 }
 
                 fn enable(&mut self) {

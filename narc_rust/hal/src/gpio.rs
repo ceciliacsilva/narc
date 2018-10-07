@@ -15,15 +15,17 @@ pub trait GpioExt {
 }
 
 /// Input Mode.
+pub struct InputS;
 pub struct Input<MODE> {
     _mode: PhantomData<MODE>,
 }
 
+
 /// Input Mode types. 
-pub struct Floating;
 pub struct PullDown;
 pub struct PullUp;
 
+pub struct OutputS;
 pub struct Output<MODE> {
     _mode: PhantomData<MODE>,
 }
@@ -32,6 +34,7 @@ pub struct Output<MODE> {
 pub struct PushPull;
 pub struct OpenDrain;
 
+pub struct Alternate;
 /// Alternate function types
 pub struct AF0;
 pub struct AF1;
@@ -50,6 +53,7 @@ pub struct AF13;
 pub struct AF14;
 pub struct AF15;
 
+pub struct Analog;
 
 macro_rules! gpio {
     ($GPIOX:ident, $gpiox:ident, $gpioy:ident, $iopxenr:ident, $iopxrst:ident, $PXx:ident, [
@@ -145,6 +149,7 @@ macro_rules! gpio {
                 }
             }
 
+
             pub struct $PXx<MODE> {
                 i: u8,
                 _mode: PhantomData<MODE>,
@@ -156,8 +161,59 @@ macro_rules! gpio {
                     _mode: PhantomData<MODE>,
                 }
 
+                impl $PXi<OutputS> {
+                    pub fn push_pull(&self, otyper: &mut OTYPER) -> $PXi<Output<PushPull>>{
+                        otyper
+                            .otyper()
+                            .modify(|r, w| unsafe { w.bits(r.bits() & !(0b1 << $i)) });
+
+                        $PXi { _mode: PhantomData }
+                    }
+                }
+
                 impl<MODE> $PXi<MODE> {
                     // TODO all modes.
+                    pub fn into_output (self, moder: &mut MODER) -> $PXi<OutputS> {
+                        let offset = 2 * $i;
+
+                        let mode = 0b01;
+                        moder.moder().modify(|r, w| unsafe {
+                            w.bits((r.bits() & !(0b11 << offset)) | (mode << offset)) });
+
+                        $PXi { _mode: PhantomData }
+                    }
+
+                    pub fn into_input (self, moder: &mut MODER) -> $PXi<InputS> {
+                        let offset = 2 * $i;
+
+                        let mode = 0b11;
+                        moder.moder().modify(|r, w| unsafe {
+                            w.bits((r.bits() & !(0b11 << offset)) | (mode << offset)) });
+
+                        $PXi { _mode: PhantomData }
+                    }
+
+                    pub fn into_alternate_af5 (self, 
+                        moder: &mut MODER,
+                        afrl: &mut AFRL)
+                        -> $PXi<AF5> {
+                        
+                        let offset = 2 * $i;
+
+                        // alternative function
+                        let mode = 0b10;
+                        moder.moder().modify(|r, w| unsafe{
+                            w.bits((r.bits() & !(0b11 << offset)) | (mode << offset))
+                        });
+
+                        let af = 5;
+                        let offset = 4 * ($i % 8);
+                        afrl.afr().modify(|r, w| unsafe {
+                            w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
+                        });
+
+                        $PXi { _mode: PhantomData }
+                    }
 
                     pub fn into_pull_up_input (
                         self, 
@@ -180,54 +236,81 @@ macro_rules! gpio {
                         $PXi { _mode: PhantomData }
                     }
 
-                    pub fn into_push_pull_output(
-                        self,
-                        moder: &mut MODER,
-                        otyper: &mut OTYPER,
-                    ) -> $PXi<Output<PushPull>> {
-                        let offset = 2 * $i;
+                    
 
-                        // output mode
-                        let mode = 0b01;
-                        moder.moder().modify(|r, w| unsafe {
-                            w.bits((r.bits() & !(0b11 << offset)) | (mode << offset))
-                        });
+                    // pub fn into_push_pull_output(
+                    //     self,
+                    //     moder: &mut MODER,
+                    //     otyper: &mut OTYPER,
+                    // ) -> $PXi<Output<PushPull>> {
+                    //     let offset = 2 * $i;
 
-                        // push pull
-                        otyper
-                            .otyper()
-                            .modify(|r, w| unsafe { w.bits(r.bits() & !(0b1 << $i)) });
+                    //     // output mode
+                    //     let mode = 0b01;
+                    //     moder.moder().modify(|r, w| unsafe {
+                    //         w.bits((r.bits() & !(0b11 << offset)) | (mode << offset))
+                    //     });
 
-                        $PXi { _mode: PhantomData }
-                    }
+                    //     // push pull
+                    //     otyper
+                    //         .otyper()
+                    //         .modify(|r, w| unsafe { w.bits(r.bits() & !(0b1 << $i)) });
 
-                    // TODO Always returning AF0
-                    pub fn into_push_pull_af(
-                        self,
-                        moder: &mut MODER,
-                        afrl: &mut AFRL,
-                        afx: u8
-                    ) -> $PXi<AF5> { 
-                        let offset = 2 * $i;
+                    //     $PXi { _mode: PhantomData }
+                    // }
 
-                        // alternative function
-                        let mode = 0b10;
-                        moder.moder().modify(|r, w| unsafe{
-                            w.bits((r.bits() & !(0b11 << offset)) | (mode << offset))
-                        });
+                    // // TODO Always returning AF0
+                    // pub fn into_push_pull_af(
+                    //     self,
+                    //     moder: &mut MODER,
+                    //     afrl: &mut AFRL,
+                    //     afx: u8
+                    // ) -> $PXi<AF5> { 
+                    //     let offset = 2 * $i;
 
-                        assert!(afx < 15);
+                    //     // alternative function
+                    //     let mode = 0b10;
+                    //     moder.moder().modify(|r, w| unsafe{
+                    //         w.bits((r.bits() & !(0b11 << offset)) | (mode << offset))
+                    //     });
 
-                        let af = afx as u32;
-                        let offset = 4 * ($i % 8);
-                        afrl.afr().modify(|r, w| unsafe {
-                            w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
-                        });
+                    //     assert!(afx < 15);
 
-                        $PXi { _mode: PhantomData }
-                    }
+                    //     let af = afx as u32;
+                    //     let offset = 4 * ($i % 8);
+                    //     afrl.afr().modify(|r, w| unsafe {
+                    //         w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
+                    //     });
+
+                    //     $PXi { _mode: PhantomData }
+                    // }
                 }
 
+                // pub trait OutputType {
+                //     // TODO maybe as_push_pull
+                //     fn push_pull(&self, otyper: &mut OTYPER) -> $PXi<Output<PushPull>>;
+                //     fn open_drain(&self, otyper: &mut OTYPER) -> $PXi<Output<OpenDrain>>;
+                // }
+
+
+                // impl OutputType for $PXi<OutputS> {
+                //     fn push_pull(&self, otyper: &mut OTYPER) -> $PXi<Output<PushPull>>{
+                //         otyper
+                //             .otyper()
+                //             .modify(|r, w| unsafe { w.bits(r.bits() & !(0b1 << $i)) });
+
+                //         $PXi { _mode: PhantomData }
+                //     }
+
+                //     fn open_drain(&self, otyper: &mut OTYPER) -> $PXi<Output<OpenDrain>>{
+                //         otyper
+                //             .otyper()
+                //             .modify(|r, w| unsafe { w.bits(r.bits() & !(0b0 << $i)) });
+
+                //         $PXi { _mode: PhantomData }
+                //     }
+                // }          
+                
                 impl<MODE> OutputPin for $PXi<Output<MODE>> {
                     fn set_high(&mut self) {
                         // NOTE(unsafe) atomic write to a stateless register
@@ -254,18 +337,23 @@ macro_rules! gpio {
     };
 }
 
+// gpio!(GPIOA, gpioa, gpioa, iopaen, ioparst, PAx, [
+//     PA0: (pa0, 0, Input<Floating>, AFRL),
+//     PA1: (pa1, 1, Input<Floating>, AFRL),
+//     PA2: (pa2, 2, Input<Floating>, AFRL),
+//     PA3: (pa3, 3, Input<Floating>, AFRL),
+//     PA4: (pa4, 4, Input<Floating>, AFRL),
+//     PA5: (pa5, 5, Input<Floating>, AFRL),
+//     PA6: (pa6, 6, Input<Floating>, AFRL),
+//     PA7: (pa7, 7, Input<Floating>, AFRL),
+//     PA8: (pa8, 8, Input<Floating>, AFRH),
+//     PA9: (pa9, 9, Input<Floating>, AFRH),
+//     PA10: (pa10, 10, Input<Floating>, AFRH),
+//     PA11: (pa11, 11, Input<Floating>, AFRH),
+//     PA12: (pa12, 12, Input<Floating>, AFRH),
+// ]);
+
 gpio!(GPIOA, gpioa, gpioa, iopaen, ioparst, PAx, [
-    PA0: (pa0, 0, Input<Floating>, AFRL),
-    PA1: (pa1, 1, Input<Floating>, AFRL),
-    PA2: (pa2, 2, Input<Floating>, AFRL),
-    PA3: (pa3, 3, Input<Floating>, AFRL),
-    PA4: (pa4, 4, Input<Floating>, AFRL),
-    PA5: (pa5, 5, Input<Floating>, AFRL),
-    PA6: (pa6, 6, Input<Floating>, AFRL),
-    PA7: (pa7, 7, Input<Floating>, AFRL),
-    PA8: (pa8, 8, Input<Floating>, AFRH),
-    PA9: (pa9, 9, Input<Floating>, AFRH),
-    PA10: (pa10, 10, Input<Floating>, AFRH),
-    PA11: (pa11, 11, Input<Floating>, AFRH),
-    PA12: (pa12, 12, Input<Floating>, AFRH),
+        // PA4: (pa4, 4, Input<Floating>, AFRL),
+        PA5: (pa5, 5, InputS, AFRL),
 ]);

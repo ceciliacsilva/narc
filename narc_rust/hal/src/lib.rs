@@ -10,3 +10,4 @@ pub mod rcc;
 pub mod gpio;
 pub mod time;
 pub mod pwm;
+pub mod delay;

@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include "hw_gpio.h"
+#include "hw_gpt.h"
 
 #ifdef __cplusplus
 }

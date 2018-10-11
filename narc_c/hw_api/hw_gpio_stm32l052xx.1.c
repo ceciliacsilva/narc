@@ -174,12 +174,12 @@ void hw_gpio_pin_set_pupd(hw_gpio_ports_t port, hw_gpio_pins_t pin,hw_gpio_pin_p
 {
 	if(hw_gpio_is_valid(port,pin))
 	{
-	hw_port_map[port]->OTYPER &= ~(0x03 << (pin*2));
-	hw_port_map[port]->OTYPER |= hw_pin_pupd_map[pupd] << (pin*2);
+        hw_port_map[port]->OTYPER &= ~(0x03 << (pin*2));
+        hw_port_map[port]->OTYPER |= hw_pin_pupd_map[pupd] << (pin*2);
 	}
 }
 
-void hw_gpio_pin_set_alternate_function_low(hw_gpio_ports_t port, hw_gpio_pins_t pin,hw_gpio_pin_alternate_function_low_t pin_alternate_function_low)
+static void hw_gpio_pin_set_alternate_function_low(hw_gpio_ports_t port, hw_gpio_pins_t pin,hw_gpio_pin_alternate_function_t pin_alternate_function)
 {
 	if(hw_gpio_is_valid(port,pin))
 	{
@@ -188,11 +188,22 @@ void hw_gpio_pin_set_alternate_function_low(hw_gpio_ports_t port, hw_gpio_pins_t
 	}
 }
 
-void hw_gpio_pin_set_alternate_function_high(hw_gpio_ports_t port, hw_gpio_pins_t pin,hw_gpio_pin_alternate_function_high_t pin_alternate_function_high)
+static void hw_gpio_pin_set_alternate_function_high(hw_gpio_ports_t port, hw_gpio_pins_t pin,hw_gpio_pin_alternate_function_t pin_alternate_function)
 {
 	if(hw_gpio_is_valid(port,pin))
 	{
 	hw_port_map[port]->AFRH &= ~(0x15 << (pin*4));
 	hw_port_map[port]->AFRH|= hw_pin_speed_map[pin_alternate_function_high] << (pin*4);
 	}
+}
+
+void hw_gpio_pin_set_alternate_function(hw_gpio_ports_t port, hw_gpio_pins_t pin, hw_gpio_pin_alternate_function_t pin_alternate_function)
+{
+    if(hw_gpio_is_valid(port,pin))
+    {
+        if(pin > HW_GPIO_PIN_AF7)
+            hw_gpio_pin_set_alternate_function_high(port,pin,pin_alternate_function);
+        else
+            hw_gpio_pin_set_alternate_function_low(port,pin,pin_alternate_function);
+    }
 }

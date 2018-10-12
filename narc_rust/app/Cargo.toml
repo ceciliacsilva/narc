@@ -10,7 +10,6 @@ cortex-m = "0.5.6"
 cortex-m-rt = {version = "0.6.3", features = ["device"]} #feature device
 cortex-m-semihosting = "0.3.1"
 
-
 [dependencies.stm32l0]
 version = "0.2.3"
 features = ["stm32l0x1", "rt"]

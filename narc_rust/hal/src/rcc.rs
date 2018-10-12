@@ -17,6 +17,7 @@ impl RccExt for RCC {
         Rcc {
             iop: IOP { _0: () },
             apb1: APB1 { _0: () },
+            apb2: APB2 { _0: () },
             cfgr: CFGR {
                 hclk: None,
                 pclk1: None,
@@ -31,7 +32,7 @@ impl RccExt for RCC {
 pub struct Rcc {
     // TODO AHB
     pub apb1: APB1,
-    // TODO APB2
+    pub apb2: APB2,
     pub iop: IOP,
     pub cfgr: CFGR,
 }
@@ -61,6 +62,20 @@ impl APB1 {
 
     pub(crate) fn rstr (&mut self) -> &rcc::APB1RSTR {
         unsafe { &(*RCC::ptr()).apb1rstr }
+    }
+}
+
+pub struct APB2 {
+    _0: (),
+}
+
+impl APB2 {
+    pub(crate) fn enr (&mut self) -> &rcc::APB2ENR {
+        unsafe { &(*RCC::ptr()).apb2enr }
+    }
+
+    pub(crate) fn rstr (&mut self) -> &rcc::APB2RSTR {
+        unsafe { &(*RCC::ptr()).apb2rstr }
     }
 }
 

@@ -159,7 +159,7 @@ macro_rules! gpio {
                 }
 
                 impl $PXi<OutputDigital> {
-                    pub fn push_pull(&self, otyper: &mut OTYPER) -> $PXi<Output<PushPull>>{
+                    pub fn push_pull(self, otyper: &mut OTYPER) -> $PXi<Output<PushPull>>{
                         let output_type = 0b0;
                         otyper
                             .otyper()
@@ -167,7 +167,7 @@ macro_rules! gpio {
 
                         $PXi { _mode: PhantomData }
                     }
-                    pub fn open_drain(&self, otyper: &mut OTYPER) -> $PXi<Output<PushPull>>{
+                    pub fn open_drain(self, otyper: &mut OTYPER) -> $PXi<Output<OpenDrain>>{
                         let output_type = 0b1;
                         otyper
                             .otyper()
@@ -179,7 +179,7 @@ macro_rules! gpio {
 
                 impl $PXi<Alternate> {
                     //TODO all others.
-                    pub fn af5(&self, afrl: &mut AFRL) -> $PXi<AF5> {
+                    pub fn af5(self, afrl: &mut AFRL) -> $PXi<AF5> {
                         let af = 5;
                         let offset = 4 * ($i % 8);
 
@@ -192,7 +192,7 @@ macro_rules! gpio {
                 }
 
                 impl $PXi<InputDigital> {
-                    pub fn pull_up(&self, pupdr: &mut PUPDR) -> $PXi<Input<PullUp>>{
+                    pub fn pull_up(self, pupdr: &mut PUPDR) -> $PXi<Input<PullUp>>{
                         let offset = 2 * $i;
 
                         let pull_type = 0b01;
@@ -202,7 +202,7 @@ macro_rules! gpio {
 
                         $PXi { _mode: PhantomData }
                     }
-                    pub fn pull_down(&self, pupdr: &mut PUPDR) -> $PXi<Input<PullDown>>{
+                    pub fn pull_down(self, pupdr: &mut PUPDR) -> $PXi<Input<PullDown>>{
                         let offset = 2 * $i;
 
                         let pull_type = 0b10;
@@ -216,6 +216,7 @@ macro_rules! gpio {
 
                 impl<MODE> $PXi<MODE> {
                     // TODO all modes.
+                    // TODO change generic MODE to Analog
                     pub fn into_output (self, moder: &mut MODER) -> $PXi<OutputDigital> {
                         let offset = 2 * $i;
 

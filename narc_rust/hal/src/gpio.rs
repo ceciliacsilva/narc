@@ -167,7 +167,7 @@ macro_rules! gpio {
 
                         $PXi { _mode: PhantomData }
                     }
-                    pub fn open_drain(self, otyper: &mut OTYPER) -> $PXi<Output<PushPull>>{
+                    pub fn open_drain(self, otyper: &mut OTYPER) -> $PXi<Output<OpenDrain>>{
                         let output_type = 0b1;
                         otyper
                             .otyper()

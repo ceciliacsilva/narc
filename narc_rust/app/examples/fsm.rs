@@ -21,6 +21,8 @@ use hal::flash::FlashExt;
 use hal::time::U32Ext;
 use hal::delay::Delay;
 
+use hal::adc::{adc_config, adc_read};
+
 use embedded_hal::PwmPin;
 use embedded_hal::prelude::*;
 
@@ -37,6 +39,10 @@ fn main() -> ! {
 
     let mut rcc = hw.RCC.constrain();
     let mut flash = hw.FLASH.constrain();
+    let mut adc = hw.ADC;
+    let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
+
+    gpioa.pa2.into_analog(&mut gpioa.moder, &mut gpioa.pupdr);
 
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
@@ -54,11 +60,15 @@ fn main() -> ! {
 
     let mut t_current = t_ref;
 
+    adc_config(&mut rcc.apb2, &mut adc);
     fsm_state_change(&mut finite_machine, 0, 0, 0);
 
     loop{
         writeln!(hstdout,"Estado atual: {:?}", finite_machine.state).unwrap();
         
+        let value = adc_read(&adc);
+        writeln!(hstdout,"ADC: {}", value).unwrap();
+
         let t_amb = atuador(&finite_machine, t_current);
         t_current = t_amb;
         writeln!(hstdout,"Temperatura ambiente: {}", t_amb).unwrap();

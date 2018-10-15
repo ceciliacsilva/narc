@@ -179,6 +179,17 @@ macro_rules! gpio {
 
                 impl $PXi<Alternate> {
                     //TODO all others.
+                    pub fn af4(self, afrl: &mut AFRL) -> $PXi<AF4> {
+                        let af = 4;
+                        let offset = 4 * ($i % 8);
+
+                        afrl.afr().modify(|r, w| unsafe {
+                            w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
+                        });
+
+                        $PXi { _mode: PhantomData }
+                    }
+
                     pub fn af5(self, afrl: &mut AFRL) -> $PXi<AF5> {
                         let af = 5;
                         let offset = 4 * ($i % 8);

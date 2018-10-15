@@ -20,6 +20,7 @@ pub enum Event {
     Txe,
 }
 
+#[derive(Debug)]
 pub enum Error {
     Framing,
     Noise,

@@ -252,8 +252,8 @@ macro_rules! usart {
                                 .clear_bit()
                                 .en()
                                 .set_bit()
-                        });
-                    }
+                            });
+                        }
 
                     Transfer::w(buffer, chan, self)
                 }

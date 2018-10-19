@@ -97,11 +97,11 @@ macro_rules! gpio {
                     }
                 }
             }
-
+            /// Implementa MODER e indica a posição da memória 
             pub struct MODER {
                 _0: (),
             }
-
+         
             impl MODER {
                 pub(crate) fn moder(&mut self) -> &$gpioy::MODER {
                     unsafe { &(*$GPIOX::ptr()).moder }
@@ -159,6 +159,7 @@ macro_rules! gpio {
                 }
 
                 impl $PXi<OutputDigital> {
+                    ///feliz
                     pub fn push_pull(self, otyper: &mut OTYPER) -> $PXi<Output<PushPull>>{
                         let output_type = 0b0;
                         otyper
@@ -217,6 +218,8 @@ macro_rules! gpio {
                 impl<MODE> $PXi<MODE> {
                     // TODO all modes.
                     // TODO change generic MODE to Analog
+                    
+                    /// Define o pino como output e retorna OutputDigital para obrigatoriamente depois definir Push Pull ou Open Drain 
                     pub fn into_output (self, moder: &mut MODER) -> $PXi<OutputDigital> {
                         let offset = 2 * $i;
 

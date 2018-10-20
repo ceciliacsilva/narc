@@ -225,7 +225,7 @@ macro_rules! gpio {
                     }
                 }
 
-                impl<MODE> $PXi<MODE> {
+                impl $PXi<Analog> {
                     // TODO all modes.
                     // TODO change generic MODE to Analog
                     pub fn into_output (self, moder: &mut MODER) -> $PXi<OutputDigital> {

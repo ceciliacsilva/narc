@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["CKMODER","Value of the field"],["OVSER","Value of the field"],["OVSRR","Value of the field"],["OVSSR","Value of the field"],["R","Value read from the register"],["TOVSR","Value of the field"],["W","Value to write to the register"],["_CKMODEW","Proxy"],["_OVSEW","Proxy"],["_OVSRW","Proxy"],["_OVSSW","Proxy"],["_TOVSW","Proxy"]]});

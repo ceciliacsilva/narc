@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `Peripherals` struct in crate `stm32l0`."><meta name="keywords" content="rust, rustlang, rust-lang, Peripherals"><title>stm32l0::stm32l0x1::Peripherals - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc struct"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Struct Peripherals</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#fields">Fields</a><div class="sidebar-links"><a href="#structfield.AES">AES</a><a href="#structfield.DMA1">DMA1</a><a href="#structfield.CRC">CRC</a><a href="#structfield.GPIOA">GPIOA</a><a href="#structfield.GPIOB">GPIOB</a><a href="#structfield.GPIOC">GPIOC</a><a href="#structfield.GPIOD">GPIOD</a><a href="#structfield.GPIOH">GPIOH</a><a href="#structfield.GPIOE">GPIOE</a><a href="#structfield.LPTIM">LPTIM</a><a href="#structfield.RTC">RTC</a><a href="#structfield.USART1">USART1</a><a href="#structfield.USART2">USART2</a><a href="#structfield.USART4">USART4</a><a href="#structfield.USART5">USART5</a><a href="#structfield.IWDG">IWDG</a><a href="#structfield.WWDG">WWDG</a><a href="#structfield.FIREWALL">FIREWALL</a><a href="#structfield.RCC">RCC</a><a href="#structfield.SYSCFG_COMP">SYSCFG_COMP</a><a href="#structfield.SPI1">SPI1</a><a href="#structfield.SPI2">SPI2</a><a href="#structfield.I2C1">I2C1</a><a href="#structfield.I2C2">I2C2</a><a href="#structfield.I2C3">I2C3</a><a href="#structfield.PWR">PWR</a><a href="#structfield.FLASH">FLASH</a><a href="#structfield.EXTI">EXTI</a><a href="#structfield.ADC">ADC</a><a href="#structfield.DBG">DBG</a><a href="#structfield.TIM2">TIM2</a><a href="#structfield.TIM3">TIM3</a><a href="#structfield.TIM6">TIM6</a><a href="#structfield.TIM7">TIM7</a><a href="#structfield.TIM21">TIM21</a><a href="#structfield.TIM22">TIM22</a><a href="#structfield.LPUART1">LPUART1</a><a href="#structfield.STK">STK</a></div><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.take">take</a><a href="#method.steal">steal</a></div><a class="sidebar-title" href="#synthetic-implementations">Auto Trait Implementations</a><div class="sidebar-links"><a href="#impl-Send">Send</a><a href="#impl-Sync">!Sync</a></div><a class="sidebar-title" href="#blanket-implementations">Blanket Implementations</a><div class="sidebar-links"><a href="#impl-TryFrom">TryFrom</a><a href="#impl-From">From</a><a href="#impl-TryInto">TryInto</a><a href="#impl-Into">Into</a><a href="#impl-Borrow">Borrow</a><a href="#impl-BorrowMut">BorrowMut</a><a href="#impl-Any">Any</a></div></div><p class='location'><a href='../index.html'>stm32l0</a>::<wbr><a href='index.html'>stm32l0x1</a></p><script>window.sidebarCurrent = {name: 'Peripherals', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/stm32l0/stm32l0x1/mod.rs.html#107473-107550' title='goto source code'>[src]</a></span><span class='in-band'>Struct <a href='../index.html'>stm32l0</a>::<wbr><a href='index.html'>stm32l0x1</a>::<wbr><a class="struct" href=''>Peripherals</a></span></h1><div class="docblock type-decl hidden-by-usual-hider"><pre class='rust struct'>pub struct Peripherals {
+    pub AES: <a class="struct" href="../../stm32l0/stm32l0x1/struct.AES.html" title="struct stm32l0::stm32l0x1::AES">AES</a>,
+    pub DMA1: <a class="struct" href="../../stm32l0/stm32l0x1/struct.DMA1.html" title="struct stm32l0::stm32l0x1::DMA1">DMA1</a>,
+    pub CRC: <a class="struct" href="../../stm32l0/stm32l0x1/struct.CRC.html" title="struct stm32l0::stm32l0x1::CRC">CRC</a>,
+    pub GPIOA: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOA.html" title="struct stm32l0::stm32l0x1::GPIOA">GPIOA</a>,
+    pub GPIOB: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOB.html" title="struct stm32l0::stm32l0x1::GPIOB">GPIOB</a>,
+    pub GPIOC: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOC.html" title="struct stm32l0::stm32l0x1::GPIOC">GPIOC</a>,
+    pub GPIOD: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOD.html" title="struct stm32l0::stm32l0x1::GPIOD">GPIOD</a>,
+    pub GPIOH: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOH.html" title="struct stm32l0::stm32l0x1::GPIOH">GPIOH</a>,
+    pub GPIOE: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOE.html" title="struct stm32l0::stm32l0x1::GPIOE">GPIOE</a>,
+    pub LPTIM: <a class="struct" href="../../stm32l0/stm32l0x1/struct.LPTIM.html" title="struct stm32l0::stm32l0x1::LPTIM">LPTIM</a>,
+    pub RTC: <a class="struct" href="../../stm32l0/stm32l0x1/struct.RTC.html" title="struct stm32l0::stm32l0x1::RTC">RTC</a>,
+    pub USART1: <a class="struct" href="../../stm32l0/stm32l0x1/struct.USART1.html" title="struct stm32l0::stm32l0x1::USART1">USART1</a>,
+    pub USART2: <a class="struct" href="../../stm32l0/stm32l0x1/struct.USART2.html" title="struct stm32l0::stm32l0x1::USART2">USART2</a>,
+    pub USART4: <a class="struct" href="../../stm32l0/stm32l0x1/struct.USART4.html" title="struct stm32l0::stm32l0x1::USART4">USART4</a>,
+    pub USART5: <a class="struct" href="../../stm32l0/stm32l0x1/struct.USART5.html" title="struct stm32l0::stm32l0x1::USART5">USART5</a>,
+    pub IWDG: <a class="struct" href="../../stm32l0/stm32l0x1/struct.IWDG.html" title="struct stm32l0::stm32l0x1::IWDG">IWDG</a>,
+    pub WWDG: <a class="struct" href="../../stm32l0/stm32l0x1/struct.WWDG.html" title="struct stm32l0::stm32l0x1::WWDG">WWDG</a>,
+    pub FIREWALL: <a class="struct" href="../../stm32l0/stm32l0x1/struct.FIREWALL.html" title="struct stm32l0::stm32l0x1::FIREWALL">FIREWALL</a>,
+    pub RCC: <a class="struct" href="../../stm32l0/stm32l0x1/struct.RCC.html" title="struct stm32l0::stm32l0x1::RCC">RCC</a>,
+    pub SYSCFG_COMP: <a class="struct" href="../../stm32l0/stm32l0x1/struct.SYSCFG_COMP.html" title="struct stm32l0::stm32l0x1::SYSCFG_COMP">SYSCFG_COMP</a>,
+    pub SPI1: <a class="struct" href="../../stm32l0/stm32l0x1/struct.SPI1.html" title="struct stm32l0::stm32l0x1::SPI1">SPI1</a>,
+    pub SPI2: <a class="struct" href="../../stm32l0/stm32l0x1/struct.SPI2.html" title="struct stm32l0::stm32l0x1::SPI2">SPI2</a>,
+    pub I2C1: <a class="struct" href="../../stm32l0/stm32l0x1/struct.I2C1.html" title="struct stm32l0::stm32l0x1::I2C1">I2C1</a>,
+    pub I2C2: <a class="struct" href="../../stm32l0/stm32l0x1/struct.I2C2.html" title="struct stm32l0::stm32l0x1::I2C2">I2C2</a>,
+    pub I2C3: <a class="struct" href="../../stm32l0/stm32l0x1/struct.I2C3.html" title="struct stm32l0::stm32l0x1::I2C3">I2C3</a>,
+    pub PWR: <a class="struct" href="../../stm32l0/stm32l0x1/struct.PWR.html" title="struct stm32l0::stm32l0x1::PWR">PWR</a>,
+    pub FLASH: <a class="struct" href="../../stm32l0/stm32l0x1/struct.FLASH.html" title="struct stm32l0::stm32l0x1::FLASH">FLASH</a>,
+    pub EXTI: <a class="struct" href="../../stm32l0/stm32l0x1/struct.EXTI.html" title="struct stm32l0::stm32l0x1::EXTI">EXTI</a>,
+    pub ADC: <a class="struct" href="../../stm32l0/stm32l0x1/struct.ADC.html" title="struct stm32l0::stm32l0x1::ADC">ADC</a>,
+    pub DBG: <a class="struct" href="../../stm32l0/stm32l0x1/struct.DBG.html" title="struct stm32l0::stm32l0x1::DBG">DBG</a>,
+    pub TIM2: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM2.html" title="struct stm32l0::stm32l0x1::TIM2">TIM2</a>,
+    pub TIM3: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM3.html" title="struct stm32l0::stm32l0x1::TIM3">TIM3</a>,
+    pub TIM6: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM6.html" title="struct stm32l0::stm32l0x1::TIM6">TIM6</a>,
+    pub TIM7: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM7.html" title="struct stm32l0::stm32l0x1::TIM7">TIM7</a>,
+    pub TIM21: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM21.html" title="struct stm32l0::stm32l0x1::TIM21">TIM21</a>,
+    pub TIM22: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM22.html" title="struct stm32l0::stm32l0x1::TIM22">TIM22</a>,
+    pub LPUART1: <a class="struct" href="../../stm32l0/stm32l0x1/struct.LPUART1.html" title="struct stm32l0::stm32l0x1::LPUART1">LPUART1</a>,
+    pub STK: <a class="struct" href="../../stm32l0/stm32l0x1/struct.STK.html" title="struct stm32l0::stm32l0x1::STK">STK</a>,
+}</pre></div><div class='docblock'><p>All the peripherals</p>
+</div><h2 id='fields' class='fields small-section-header'>
+                       Fields<a href='#fields' class='anchor'></a></h2><span id="structfield.AES" class="structfield small-section-header">
+                           <a href="#structfield.AES" class="anchor field"></a>
+                           <span id="AES.v" class='invisible'>
+                           <code>AES: <a class="struct" href="../../stm32l0/stm32l0x1/struct.AES.html" title="struct stm32l0::stm32l0x1::AES">AES</a></code>
+                           </span></span><div class='docblock'><p>AES</p>
+</div><span id="structfield.DMA1" class="structfield small-section-header">
+                           <a href="#structfield.DMA1" class="anchor field"></a>
+                           <span id="DMA1.v" class='invisible'>
+                           <code>DMA1: <a class="struct" href="../../stm32l0/stm32l0x1/struct.DMA1.html" title="struct stm32l0::stm32l0x1::DMA1">DMA1</a></code>
+                           </span></span><div class='docblock'><p>DMA1</p>
+</div><span id="structfield.CRC" class="structfield small-section-header">
+                           <a href="#structfield.CRC" class="anchor field"></a>
+                           <span id="CRC.v" class='invisible'>
+                           <code>CRC: <a class="struct" href="../../stm32l0/stm32l0x1/struct.CRC.html" title="struct stm32l0::stm32l0x1::CRC">CRC</a></code>
+                           </span></span><div class='docblock'><p>CRC</p>
+</div><span id="structfield.GPIOA" class="structfield small-section-header">
+                           <a href="#structfield.GPIOA" class="anchor field"></a>
+                           <span id="GPIOA.v" class='invisible'>
+                           <code>GPIOA: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOA.html" title="struct stm32l0::stm32l0x1::GPIOA">GPIOA</a></code>
+                           </span></span><div class='docblock'><p>GPIOA</p>
+</div><span id="structfield.GPIOB" class="structfield small-section-header">
+                           <a href="#structfield.GPIOB" class="anchor field"></a>
+                           <span id="GPIOB.v" class='invisible'>
+                           <code>GPIOB: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOB.html" title="struct stm32l0::stm32l0x1::GPIOB">GPIOB</a></code>
+                           </span></span><div class='docblock'><p>GPIOB</p>
+</div><span id="structfield.GPIOC" class="structfield small-section-header">
+                           <a href="#structfield.GPIOC" class="anchor field"></a>
+                           <span id="GPIOC.v" class='invisible'>
+                           <code>GPIOC: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOC.html" title="struct stm32l0::stm32l0x1::GPIOC">GPIOC</a></code>
+                           </span></span><div class='docblock'><p>GPIOC</p>
+</div><span id="structfield.GPIOD" class="structfield small-section-header">
+                           <a href="#structfield.GPIOD" class="anchor field"></a>
+                           <span id="GPIOD.v" class='invisible'>
+                           <code>GPIOD: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOD.html" title="struct stm32l0::stm32l0x1::GPIOD">GPIOD</a></code>
+                           </span></span><div class='docblock'><p>GPIOD</p>
+</div><span id="structfield.GPIOH" class="structfield small-section-header">
+                           <a href="#structfield.GPIOH" class="anchor field"></a>
+                           <span id="GPIOH.v" class='invisible'>
+                           <code>GPIOH: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOH.html" title="struct stm32l0::stm32l0x1::GPIOH">GPIOH</a></code>
+                           </span></span><div class='docblock'><p>GPIOH</p>
+</div><span id="structfield.GPIOE" class="structfield small-section-header">
+                           <a href="#structfield.GPIOE" class="anchor field"></a>
+                           <span id="GPIOE.v" class='invisible'>
+                           <code>GPIOE: <a class="struct" href="../../stm32l0/stm32l0x1/struct.GPIOE.html" title="struct stm32l0::stm32l0x1::GPIOE">GPIOE</a></code>
+                           </span></span><div class='docblock'><p>GPIOE</p>
+</div><span id="structfield.LPTIM" class="structfield small-section-header">
+                           <a href="#structfield.LPTIM" class="anchor field"></a>
+                           <span id="LPTIM.v" class='invisible'>
+                           <code>LPTIM: <a class="struct" href="../../stm32l0/stm32l0x1/struct.LPTIM.html" title="struct stm32l0::stm32l0x1::LPTIM">LPTIM</a></code>
+                           </span></span><div class='docblock'><p>LPTIM</p>
+</div><span id="structfield.RTC" class="structfield small-section-header">
+                           <a href="#structfield.RTC" class="anchor field"></a>
+                           <span id="RTC.v" class='invisible'>
+                           <code>RTC: <a class="struct" href="../../stm32l0/stm32l0x1/struct.RTC.html" title="struct stm32l0::stm32l0x1::RTC">RTC</a></code>
+                           </span></span><div class='docblock'><p>RTC</p>
+</div><span id="structfield.USART1" class="structfield small-section-header">
+                           <a href="#structfield.USART1" class="anchor field"></a>
+                           <span id="USART1.v" class='invisible'>
+                           <code>USART1: <a class="struct" href="../../stm32l0/stm32l0x1/struct.USART1.html" title="struct stm32l0::stm32l0x1::USART1">USART1</a></code>
+                           </span></span><div class='docblock'><p>USART1</p>
+</div><span id="structfield.USART2" class="structfield small-section-header">
+                           <a href="#structfield.USART2" class="anchor field"></a>
+                           <span id="USART2.v" class='invisible'>
+                           <code>USART2: <a class="struct" href="../../stm32l0/stm32l0x1/struct.USART2.html" title="struct stm32l0::stm32l0x1::USART2">USART2</a></code>
+                           </span></span><div class='docblock'><p>USART2</p>
+</div><span id="structfield.USART4" class="structfield small-section-header">
+                           <a href="#structfield.USART4" class="anchor field"></a>
+                           <span id="USART4.v" class='invisible'>
+                           <code>USART4: <a class="struct" href="../../stm32l0/stm32l0x1/struct.USART4.html" title="struct stm32l0::stm32l0x1::USART4">USART4</a></code>
+                           </span></span><div class='docblock'><p>USART4</p>
+</div><span id="structfield.USART5" class="structfield small-section-header">
+                           <a href="#structfield.USART5" class="anchor field"></a>
+                           <span id="USART5.v" class='invisible'>
+                           <code>USART5: <a class="struct" href="../../stm32l0/stm32l0x1/struct.USART5.html" title="struct stm32l0::stm32l0x1::USART5">USART5</a></code>
+                           </span></span><div class='docblock'><p>USART5</p>
+</div><span id="structfield.IWDG" class="structfield small-section-header">
+                           <a href="#structfield.IWDG" class="anchor field"></a>
+                           <span id="IWDG.v" class='invisible'>
+                           <code>IWDG: <a class="struct" href="../../stm32l0/stm32l0x1/struct.IWDG.html" title="struct stm32l0::stm32l0x1::IWDG">IWDG</a></code>
+                           </span></span><div class='docblock'><p>IWDG</p>
+</div><span id="structfield.WWDG" class="structfield small-section-header">
+                           <a href="#structfield.WWDG" class="anchor field"></a>
+                           <span id="WWDG.v" class='invisible'>
+                           <code>WWDG: <a class="struct" href="../../stm32l0/stm32l0x1/struct.WWDG.html" title="struct stm32l0::stm32l0x1::WWDG">WWDG</a></code>
+                           </span></span><div class='docblock'><p>WWDG</p>
+</div><span id="structfield.FIREWALL" class="structfield small-section-header">
+                           <a href="#structfield.FIREWALL" class="anchor field"></a>
+                           <span id="FIREWALL.v" class='invisible'>
+                           <code>FIREWALL: <a class="struct" href="../../stm32l0/stm32l0x1/struct.FIREWALL.html" title="struct stm32l0::stm32l0x1::FIREWALL">FIREWALL</a></code>
+                           </span></span><div class='docblock'><p>FIREWALL</p>
+</div><span id="structfield.RCC" class="structfield small-section-header">
+                           <a href="#structfield.RCC" class="anchor field"></a>
+                           <span id="RCC.v" class='invisible'>
+                           <code>RCC: <a class="struct" href="../../stm32l0/stm32l0x1/struct.RCC.html" title="struct stm32l0::stm32l0x1::RCC">RCC</a></code>
+                           </span></span><div class='docblock'><p>RCC</p>
+</div><span id="structfield.SYSCFG_COMP" class="structfield small-section-header">
+                           <a href="#structfield.SYSCFG_COMP" class="anchor field"></a>
+                           <span id="SYSCFG_COMP.v" class='invisible'>
+                           <code>SYSCFG_COMP: <a class="struct" href="../../stm32l0/stm32l0x1/struct.SYSCFG_COMP.html" title="struct stm32l0::stm32l0x1::SYSCFG_COMP">SYSCFG_COMP</a></code>
+                           </span></span><div class='docblock'><p>SYSCFG_COMP</p>
+</div><span id="structfield.SPI1" class="structfield small-section-header">
+                           <a href="#structfield.SPI1" class="anchor field"></a>
+                           <span id="SPI1.v" class='invisible'>
+                           <code>SPI1: <a class="struct" href="../../stm32l0/stm32l0x1/struct.SPI1.html" title="struct stm32l0::stm32l0x1::SPI1">SPI1</a></code>
+                           </span></span><div class='docblock'><p>SPI1</p>
+</div><span id="structfield.SPI2" class="structfield small-section-header">
+                           <a href="#structfield.SPI2" class="anchor field"></a>
+                           <span id="SPI2.v" class='invisible'>
+                           <code>SPI2: <a class="struct" href="../../stm32l0/stm32l0x1/struct.SPI2.html" title="struct stm32l0::stm32l0x1::SPI2">SPI2</a></code>
+                           </span></span><div class='docblock'><p>SPI2</p>
+</div><span id="structfield.I2C1" class="structfield small-section-header">
+                           <a href="#structfield.I2C1" class="anchor field"></a>
+                           <span id="I2C1.v" class='invisible'>
+                           <code>I2C1: <a class="struct" href="../../stm32l0/stm32l0x1/struct.I2C1.html" title="struct stm32l0::stm32l0x1::I2C1">I2C1</a></code>
+                           </span></span><div class='docblock'><p>I2C1</p>
+</div><span id="structfield.I2C2" class="structfield small-section-header">
+                           <a href="#structfield.I2C2" class="anchor field"></a>
+                           <span id="I2C2.v" class='invisible'>
+                           <code>I2C2: <a class="struct" href="../../stm32l0/stm32l0x1/struct.I2C2.html" title="struct stm32l0::stm32l0x1::I2C2">I2C2</a></code>
+                           </span></span><div class='docblock'><p>I2C2</p>
+</div><span id="structfield.I2C3" class="structfield small-section-header">
+                           <a href="#structfield.I2C3" class="anchor field"></a>
+                           <span id="I2C3.v" class='invisible'>
+                           <code>I2C3: <a class="struct" href="../../stm32l0/stm32l0x1/struct.I2C3.html" title="struct stm32l0::stm32l0x1::I2C3">I2C3</a></code>
+                           </span></span><div class='docblock'><p>I2C3</p>
+</div><span id="structfield.PWR" class="structfield small-section-header">
+                           <a href="#structfield.PWR" class="anchor field"></a>
+                           <span id="PWR.v" class='invisible'>
+                           <code>PWR: <a class="struct" href="../../stm32l0/stm32l0x1/struct.PWR.html" title="struct stm32l0::stm32l0x1::PWR">PWR</a></code>
+                           </span></span><div class='docblock'><p>PWR</p>
+</div><span id="structfield.FLASH" class="structfield small-section-header">
+                           <a href="#structfield.FLASH" class="anchor field"></a>
+                           <span id="FLASH.v" class='invisible'>
+                           <code>FLASH: <a class="struct" href="../../stm32l0/stm32l0x1/struct.FLASH.html" title="struct stm32l0::stm32l0x1::FLASH">FLASH</a></code>
+                           </span></span><div class='docblock'><p>FLASH</p>
+</div><span id="structfield.EXTI" class="structfield small-section-header">
+                           <a href="#structfield.EXTI" class="anchor field"></a>
+                           <span id="EXTI.v" class='invisible'>
+                           <code>EXTI: <a class="struct" href="../../stm32l0/stm32l0x1/struct.EXTI.html" title="struct stm32l0::stm32l0x1::EXTI">EXTI</a></code>
+                           </span></span><div class='docblock'><p>EXTI</p>
+</div><span id="structfield.ADC" class="structfield small-section-header">
+                           <a href="#structfield.ADC" class="anchor field"></a>
+                           <span id="ADC.v" class='invisible'>
+                           <code>ADC: <a class="struct" href="../../stm32l0/stm32l0x1/struct.ADC.html" title="struct stm32l0::stm32l0x1::ADC">ADC</a></code>
+                           </span></span><div class='docblock'><p>ADC</p>
+</div><span id="structfield.DBG" class="structfield small-section-header">
+                           <a href="#structfield.DBG" class="anchor field"></a>
+                           <span id="DBG.v" class='invisible'>
+                           <code>DBG: <a class="struct" href="../../stm32l0/stm32l0x1/struct.DBG.html" title="struct stm32l0::stm32l0x1::DBG">DBG</a></code>
+                           </span></span><div class='docblock'><p>DBG</p>
+</div><span id="structfield.TIM2" class="structfield small-section-header">
+                           <a href="#structfield.TIM2" class="anchor field"></a>
+                           <span id="TIM2.v" class='invisible'>
+                           <code>TIM2: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM2.html" title="struct stm32l0::stm32l0x1::TIM2">TIM2</a></code>
+                           </span></span><div class='docblock'><p>TIM2</p>
+</div><span id="structfield.TIM3" class="structfield small-section-header">
+                           <a href="#structfield.TIM3" class="anchor field"></a>
+                           <span id="TIM3.v" class='invisible'>
+                           <code>TIM3: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM3.html" title="struct stm32l0::stm32l0x1::TIM3">TIM3</a></code>
+                           </span></span><div class='docblock'><p>TIM3</p>
+</div><span id="structfield.TIM6" class="structfield small-section-header">
+                           <a href="#structfield.TIM6" class="anchor field"></a>
+                           <span id="TIM6.v" class='invisible'>
+                           <code>TIM6: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM6.html" title="struct stm32l0::stm32l0x1::TIM6">TIM6</a></code>
+                           </span></span><div class='docblock'><p>TIM6</p>
+</div><span id="structfield.TIM7" class="structfield small-section-header">
+                           <a href="#structfield.TIM7" class="anchor field"></a>
+                           <span id="TIM7.v" class='invisible'>
+                           <code>TIM7: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM7.html" title="struct stm32l0::stm32l0x1::TIM7">TIM7</a></code>
+                           </span></span><div class='docblock'><p>TIM7</p>
+</div><span id="structfield.TIM21" class="structfield small-section-header">
+                           <a href="#structfield.TIM21" class="anchor field"></a>
+                           <span id="TIM21.v" class='invisible'>
+                           <code>TIM21: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM21.html" title="struct stm32l0::stm32l0x1::TIM21">TIM21</a></code>
+                           </span></span><div class='docblock'><p>TIM21</p>
+</div><span id="structfield.TIM22" class="structfield small-section-header">
+                           <a href="#structfield.TIM22" class="anchor field"></a>
+                           <span id="TIM22.v" class='invisible'>
+                           <code>TIM22: <a class="struct" href="../../stm32l0/stm32l0x1/struct.TIM22.html" title="struct stm32l0::stm32l0x1::TIM22">TIM22</a></code>
+                           </span></span><div class='docblock'><p>TIM22</p>
+</div><span id="structfield.LPUART1" class="structfield small-section-header">
+                           <a href="#structfield.LPUART1" class="anchor field"></a>
+                           <span id="LPUART1.v" class='invisible'>
+                           <code>LPUART1: <a class="struct" href="../../stm32l0/stm32l0x1/struct.LPUART1.html" title="struct stm32l0::stm32l0x1::LPUART1">LPUART1</a></code>
+                           </span></span><div class='docblock'><p>LPUART1</p>
+</div><span id="structfield.STK" class="structfield small-section-header">
+                           <a href="#structfield.STK" class="anchor field"></a>
+                           <span id="STK.v" class='invisible'>
+                           <code>STK: <a class="struct" href="../../stm32l0/stm32l0x1/struct.STK.html" title="struct stm32l0::stm32l0x1::STK">STK</a></code>
+                           </span></span><div class='docblock'><p>STK</p>
+</div><h2 id='methods' class='small-section-header'>Methods<a href='#methods' class='anchor'></a></h2><h3 id='impl' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="struct" href="../../stm32l0/stm32l0x1/struct.Peripherals.html" title="struct stm32l0::stm32l0x1::Peripherals">Peripherals</a></code><a href='#impl' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/stm32l0/stm32l0x1/mod.rs.html#107551-107684' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.take' class="method"><span id='take.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.take' class='fnname'>take</a>() -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;Self&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/stm32l0/stm32l0x1/mod.rs.html#107554-107562' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns all the peripherals <em>once</em></p>
+</div><h4 id='method.steal' class="method"><span id='steal.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub unsafe fn <a href='#method.steal' class='fnname'>steal</a>() -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/stm32l0/stm32l0x1/mod.rs.html#107564-107683' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Unchecked version of <code>Peripherals::take</code></p>
+</div></div><h2 id='synthetic-implementations' class='small-section-header'>Auto Trait Implementations<a href='#synthetic-implementations' class='anchor'></a></h2><div id='synthetic-implementations-list'><h3 id='impl-Send' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> for <a class="struct" href="../../stm32l0/stm32l0x1/struct.Peripherals.html" title="struct stm32l0::stm32l0x1::Peripherals">Peripherals</a></code><a href='#impl-Send' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-Sync' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl !<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> for <a class="struct" href="../../stm32l0/stm32l0x1/struct.Peripherals.html" title="struct stm32l0::stm32l0x1::Peripherals">Peripherals</a></code><a href='#impl-Sync' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div></div><h2 id='blanket-implementations' class='small-section-header'>Blanket Implementations<a href='#blanket-implementations' class='anchor'></a></h2><div id='blanket-implementations-list'><h3 id='impl-TryFrom' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;T, U&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom">TryFrom</a> for T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html" title="trait core::convert::From">From</a>&lt;U&gt;,&nbsp;</span></code><a href='#impl-TryFrom' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/convert.rs.html#481-487' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='associatedtype.Error' class="type"><span id='Error.t' class='invisible'><code>type <a href='https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html#associatedtype.Error' class="type">Error</a> = !</code></span></h4>
+<div class='stability'><div class='stab unstable'><span class=microscope>🔬</span> This is a nightly-only experimental API.  (<code>try_from</code>)</div></div><div class='docblock'><p>The type returned in the event of a conversion error.</p>
+</div><h4 id='method.try_from' class="method"><span id='try_from.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html#tymethod.try_from' class='fnname'>try_from</a>(value: U) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, &lt;T as <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom">TryFrom</a>&lt;U&gt;&gt;::<a class="type" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html#associatedtype.Error" title="type core::convert::TryFrom::Error">Error</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/convert.rs.html#484-486' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='stability'><div class='stab unstable'><span class=microscope>🔬</span> This is a nightly-only experimental API.  (<code>try_from</code>)</div></div><div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 id='impl-From' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;T&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html" title="trait core::convert::From">From</a> for T</code><a href='#impl-From' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/convert.rs.html#462-464' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.from' class="method"><span id='from.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(t: T) -&gt; T</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/convert.rs.html#463' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 id='impl-TryInto' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;T, U&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryInto.html" title="trait core::convert::TryInto">TryInto</a> for T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;U: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom">TryFrom</a>&lt;T&gt;,&nbsp;</span></code><a href='#impl-TryInto' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/convert.rs.html#469-476' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='associatedtype.Error-1' class="type"><span id='Error.t-1' class='invisible'><code>type <a href='https://doc.rust-lang.org/nightly/core/convert/trait.TryInto.html#associatedtype.Error' class="type">Error</a> = &lt;U as <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom">TryFrom</a>&lt;T&gt;&gt;::<a class="type" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html#associatedtype.Error" title="type core::convert::TryFrom::Error">Error</a></code></span></h4>
+<div class='stability'><div class='stab unstable'><span class=microscope>🔬</span> This is a nightly-only experimental API.  (<code>try_from</code>)</div></div><div class='docblock'><p>The type returned in the event of a conversion error.</p>
+</div><h4 id='method.try_into' class="method"><span id='try_into.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.TryInto.html#tymethod.try_into' class='fnname'>try_into</a>(self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;U, &lt;U as <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom">TryFrom</a>&lt;T&gt;&gt;::<a class="type" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html#associatedtype.Error" title="type core::convert::TryFrom::Error">Error</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/convert.rs.html#473-475' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='stability'><div class='stab unstable'><span class=microscope>🔬</span> This is a nightly-only experimental API.  (<code>try_from</code>)</div></div><div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 id='impl-Into' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;T, U&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a> for T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;U: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html" title="trait core::convert::From">From</a>&lt;T&gt;,&nbsp;</span></code><a href='#impl-Into' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/convert.rs.html#453-458' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.into' class="method"><span id='into.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.Into.html#tymethod.into' class='fnname'>into</a>(self) -&gt; U</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/convert.rs.html#455-457' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 id='impl-Borrow' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;T&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/borrow/trait.Borrow.html" title="trait core::borrow::Borrow">Borrow</a> for T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,&nbsp;</span></code><a href='#impl-Borrow' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/borrow.rs.html#219-221' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.borrow' class="method"><span id='borrow.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/borrow/trait.Borrow.html#tymethod.borrow' class='fnname'>borrow</a>(&amp;self) -&gt; &amp;T</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/borrow.rs.html#220' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Immutably borrows from an owned value. <a href="https://doc.rust-lang.org/nightly/core/borrow/trait.Borrow.html#tymethod.borrow">Read more</a></p>
+</div></div><h3 id='impl-BorrowMut' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;T&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/borrow/trait.BorrowMut.html" title="trait core::borrow::BorrowMut">BorrowMut</a> for T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,&nbsp;</span></code><a href='#impl-BorrowMut' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/borrow.rs.html#224-226' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.borrow_mut' class="method"><span id='borrow_mut.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/borrow/trait.BorrowMut.html#tymethod.borrow_mut' class='fnname'>borrow_mut</a>(&amp;mut self) -&gt; &amp;mut T</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/borrow.rs.html#225' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Mutably borrows from an owned value. <a href="https://doc.rust-lang.org/nightly/core/borrow/trait.BorrowMut.html#tymethod.borrow_mut">Read more</a></p>
+</div></div><h3 id='impl-Any' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;T&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/any/trait.Any.html" title="trait core::any::Any">Any</a> for T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: 'static + ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,&nbsp;</span></code><a href='#impl-Any' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/any.rs.html#114-116' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.get_type_id' class="method"><span id='get_type_id.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/any/trait.Any.html#tymethod.get_type_id' class='fnname'>get_type_id</a>(&amp;self) -&gt; <a class="struct" href="https://doc.rust-lang.org/nightly/core/any/struct.TypeId.html" title="struct core::any::TypeId">TypeId</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/any.rs.html#115' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='stability'><div class='stab unstable'><details><summary><span class=microscope>🔬</span> This is a nightly-only experimental API.  (<code>get_type_id</code>)</summary><p>this method will likely be replaced by an associated static</p>
+</details></div></div><div class='docblock'><p>Gets the <code>TypeId</code> of <code>self</code>. <a href="https://doc.rust-lang.org/nightly/core/any/trait.Any.html#tymethod.get_type_id">Read more</a></p>
+</div></div></div></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "stm32l0";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

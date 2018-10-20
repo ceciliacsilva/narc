@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["HSI16CALR","Value of the field"],["HSI16TRIMR","Value of the field"],["MSICALR","Value of the field"],["MSIRANGER","Value of the field"],["MSITRIMR","Value of the field"],["R","Value read from the register"],["W","Value to write to the register"],["_HSI16TRIMW","Proxy"],["_MSIRANGEW","Proxy"],["_MSITRIMW","Proxy"]]});

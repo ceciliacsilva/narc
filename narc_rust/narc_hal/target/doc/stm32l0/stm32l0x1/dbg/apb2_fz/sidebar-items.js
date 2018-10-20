@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["DBG_TIMER21_STOPR","Value of the field"],["DBG_TIMER22_STOR","Value of the field"],["R","Value read from the register"],["W","Value to write to the register"],["_DBG_TIMER21_STOPW","Proxy"],["_DBG_TIMER22_STOW","Proxy"]]});

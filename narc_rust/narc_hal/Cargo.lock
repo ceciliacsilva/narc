@@ -67,8 +67,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "hal"
-version = "0.1.0"
+name = "narc_hal"
+version = "0.1.1"
 dependencies = [
  "cast 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "cortex-m 0.5.7 (registry+https://github.com/rust-lang/crates.io-index)",

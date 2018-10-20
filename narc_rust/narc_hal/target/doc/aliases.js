@@ -9,6 +9,7 @@ ALIASES['cortex_m_rt_macros'] = {};
 ALIASES['cortex_m_semihosting'] = {};
 ALIASES['embedded_hal'] = {};
 ALIASES['hal'] = {};
+ALIASES['narc_hal'] = {};
 ALIASES['nb'] = {};
 ALIASES['panic_semihosting'] = {};
 ALIASES['proc_macro2'] = {};

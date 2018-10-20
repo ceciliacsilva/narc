@@ -1,5 +1,5 @@
 [package]
-name = "hal"
+name = "hal_narc"
 version = "0.1.0"
 authors = ["Marcelo Braga <marcelopbj@hotmail.com>"]
 description = "..."

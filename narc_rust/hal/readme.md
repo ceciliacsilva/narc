@@ -16,20 +16,19 @@
 - [ ] Afs (mudar isso)
     - [x] AF5 - PA5 TIM2_ch1
 - [ ] GPIOB, GPIOC...
-- [ ] Rever os into_pu...
+- [x] Rever os into_pu... 
+- [ ] Rever push_pull, open_drain.
 
 ### Time
-- [ ] 
-
-### AFIO
-    Pensar como abstrair isso...
-- [ ] remap
+- [x] 
 
 ### PWM
-- [ ] Pwm
-- [ ] PwmPin
+- [x] Pwm
+- [x] PwmPin
 ...
 
 ### Exception
 - [ ] Systick
 
+### ADC
+- [ ] Abstraction 0 - adc_config and adc_read.

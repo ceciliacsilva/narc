@@ -19,6 +19,9 @@ use hal::pwm::PwmExt;
 use hal::flash::FlashExt;
 use hal::time::U32Ext;
 
+use embedded_hal::digital::OutputPin;
+use embedded_hal::digital::InputPin;
+
 use embedded_hal::PwmPin;
 use cortex_m_rt::entry;
 
@@ -38,19 +41,30 @@ fn blinky() {
     let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
-    let led = gpioa.pa5.into_alternate(&mut gpioa.moder).af5(&mut gpioa.afrl);
+    // let led = gpioa.pa5.into_alternate(&mut gpioa.moder).af5(&mut gpioa.afrl);
 
-    let mut pwm = hw.TIM2
-                    .pwm(
-                        led,
-                        1.hz(),
-                        clocks,
-                        &mut rcc.apb1,
-                    );
+    // let mut pwm = hw.TIM2
+    //                 .pwm(
+    //                     led,
+    //                     1.hz(),
+    //                     clocks,
+    //                     &mut rcc.apb1,
+    //                 );
 
-    let max = pwm.get_max_duty();
-    pwm.enable();
-    pwm.set_duty(max / 2);
+    // let max = pwm.get_max_duty();
+    // pwm.enable();
+    // pwm.set_duty(max / 2);
+
+    let mut led = gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
+    let bot = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
+
+    loop{
+        if bot.is_high(){
+            led.set_high();
+        } else {
+            led.set_low();
+        }
+    }
 }
 
 #[allow(deprecated)]

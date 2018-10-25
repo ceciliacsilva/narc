@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["APB1",""],["APB2",""],["CFGR",""],["Clocks",""],["IOP",""],["Rcc",""]],"trait":[["RccExt",""]]});

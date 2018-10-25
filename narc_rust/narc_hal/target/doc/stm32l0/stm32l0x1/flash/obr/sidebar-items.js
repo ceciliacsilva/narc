@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["BOR_LEVR","Value of the field"],["R","Value read from the register"],["RDPRTR","Value of the field"],["SPRMODR","Value of the field"]]});

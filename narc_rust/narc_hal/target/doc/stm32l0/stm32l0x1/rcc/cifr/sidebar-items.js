@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["CSSHSEFR","Value of the field"],["CSSLSEFR","Value of the field"],["HSERDYFR","Value of the field"],["HSI16RDYFR","Value of the field"],["LSERDYFR","Value of the field"],["LSIRDYFR","Value of the field"],["MSIRDYFR","Value of the field"],["PLLRDYFR","Value of the field"],["R","Value read from the register"]]});

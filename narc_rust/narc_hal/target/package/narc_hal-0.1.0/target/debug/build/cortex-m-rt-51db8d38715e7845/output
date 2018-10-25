@@ -1,3 +1,0 @@
-cargo:rustc-link-search=/home/marcelo/narc/narc_rust/narc_hal/target/package/narc_hal-0.1.0/target/debug/build/cortex-m-rt-51db8d38715e7845/out
-cargo:rerun-if-changed=build.rs
-cargo:rerun-if-changed=link.x.in

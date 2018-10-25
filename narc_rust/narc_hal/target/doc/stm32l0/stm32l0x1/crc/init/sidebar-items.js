@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["CRC_INITR","Value of the field"],["R","Value read from the register"],["W","Value to write to the register"],["_CRC_INITW","Proxy"]]});

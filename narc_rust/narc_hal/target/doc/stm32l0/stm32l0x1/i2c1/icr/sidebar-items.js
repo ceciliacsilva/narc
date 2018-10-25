@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["W","Value to write to the register"],["_ADDRCFW","Proxy"],["_ALERTCFW","Proxy"],["_ARLOCFW","Proxy"],["_BERRCFW","Proxy"],["_NACKCFW","Proxy"],["_OVRCFW","Proxy"],["_PECCFW","Proxy"],["_STOPCFW","Proxy"],["_TIMOUTCFW","Proxy"]]});

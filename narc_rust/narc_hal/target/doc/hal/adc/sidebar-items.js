@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["adc_config",""],["adc_read",""]]});

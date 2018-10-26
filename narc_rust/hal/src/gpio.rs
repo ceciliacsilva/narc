@@ -7,11 +7,13 @@ use core::marker::PhantomData;
 use rcc::IOP;
 
 use embedded_hal::digital::{OutputPin, InputPin};
-///Extention trait para o GPIAO para pinos e registros
+/// Extenção da trait para o pino GPIO e seus registros
 pub trait GpioExt {
+    ///Split dentro do GPIO
     type Parts;
-
+    /// Divide o GPIO em pinos e em registros
     fn split(self, iop: &mut IOP) -> Self::Parts;
+
 }
 
 /// Digital Input Mode
@@ -87,10 +89,15 @@ macro_rules! gpio {
             use super::*;
             /// GPIO parts
             pub struct Parts {
+                /// Registro do MODER
                 pub moder: MODER,
+                /// Registro do OTYPER
                 pub otyper: OTYPER,
+                /// Registro do PUPDR
                 pub pupdr: PUPDR,
+                /// Registro do AFRH
                 pub afrh: AFRH,
+                /// Registro do AFRL
                 pub afrl: AFRL,
                 $(
                     pub $pxi: $PXi<$MODE>,
@@ -177,9 +184,9 @@ macro_rules! gpio {
                 pub struct $PXi<MODE> {
                     _mode: PhantomData<MODE>,
                 }
-
+                /// Configura o pin como Output 
                 impl $PXi<OutputDigital> {
-                    ///feliz
+                    //! Define o pin como Push Pull 
                     pub fn push_pull(self, otyper: &mut OTYPER) -> $PXi<Output<PushPull>>{
                         let output_type = 0b0;
                         otyper
@@ -188,6 +195,7 @@ macro_rules! gpio {
 
                         $PXi { _mode: PhantomData }
                     }
+                    /// Configura o pin Open Drain
                     pub fn open_drain(self, otyper: &mut OTYPER) -> $PXi<Output<OpenDrain>>{
                         let output_type = 0b1;
                         otyper
@@ -199,7 +207,7 @@ macro_rules! gpio {
                 }
 
                 impl $PXi<Alternate> {
-                    //TODO all others.
+                    /// Configura o pin 5 como alternative
                     pub fn af5(self, afrl: &mut AFRL) -> $PXi<AF5> {
                         let af = 5;
                         let offset = 4 * ($i % 8);
@@ -211,8 +219,9 @@ macro_rules! gpio {
                         $PXi { _mode: PhantomData }
                     }
                 }
-
+                /// Configura o pin como Input
                 impl $PXi<InputDigital> {
+                    /// Define o pin como Pull Up
                     pub fn pull_up(self, pupdr: &mut PUPDR) -> $PXi<Input<PullUp>>{
                         let offset = 2 * $i;
 
@@ -223,6 +232,7 @@ macro_rules! gpio {
 
                         $PXi { _mode: PhantomData }
                     }
+                    /// Define o pin com Pull Down
                     pub fn pull_down(self, pupdr: &mut PUPDR) -> $PXi<Input<PullDown>>{
                         let offset = 2 * $i;
 
@@ -239,7 +249,7 @@ macro_rules! gpio {
                     // TODO all modes.
                     // TODO change generic MODE to Analog
                     
-                    /// Define o pino como output e retorna OutputDigital para obrigatoriamente depois definir Push Pull ou Open Drain 
+                    /// Define o pin como Output
                     pub fn into_output (self, moder: &mut MODER) -> $PXi<OutputDigital> {
                         let offset = 2 * $i;
 
@@ -249,7 +259,7 @@ macro_rules! gpio {
 
                         $PXi { _mode: PhantomData }
                     }
-
+                    /// Define o pin como Input
                     pub fn into_input (self, moder: &mut MODER) -> $PXi<InputDigital> {
                         let offset = 2 * $i;
 
@@ -259,7 +269,7 @@ macro_rules! gpio {
 
                         $PXi { _mode: PhantomData }
                     }
-
+                    /// Define o pin como função Alternativa
                     pub fn into_alternate (self, moder: &mut MODER) -> $PXi<Alternate> {
                         let offset = 2 * $i;
 
@@ -272,7 +282,7 @@ macro_rules! gpio {
                         $PXi { _mode: PhantomData }
                     }
 
-                    /// PUPD(i) = 00, os estados são reservados.
+                    /// Estado de reset dos pinos
                     pub fn into_analog (self, moder: &mut MODER, pupdr: &mut PUPDR) -> $PXi<Analog> {
                         let offset = 2 * $i;
 
@@ -290,7 +300,7 @@ macro_rules! gpio {
                         $PXi { _mode: PhantomData }
                     }
                 }
-                
+                /// Faz a configuração do estado do pin
                 impl<MODE> OutputPin for $PXi<Output<MODE>> {
                     fn set_high(&mut self) {
                         unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << $i)) }
@@ -300,7 +310,7 @@ macro_rules! gpio {
                         unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << (16 + $i))) }
                     }
                 }
-                
+                /// Faz a leitura do estado do pin
                 impl<MODE> InputPin for $PXi<Input<MODE>> {
                     fn is_high(&self) -> bool {
                         !self.is_low()

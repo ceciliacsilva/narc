@@ -16,4 +16,4 @@ pub mod pwm;
 pub mod delay;
 pub mod adc;
 pub mod serial;
-mod dma;
+pub mod dma;

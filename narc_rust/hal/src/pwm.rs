@@ -3,7 +3,7 @@ use core::mem;
 
 use cast::{u16, u32};
 use embedded_hal::{PwmPin};
-use stm32l0::stm32l0x1::{TIM2};
+use stm32l052::{TIM2};
 
 use gpio::gpioa::{PA0, PA1, PA2, PA3, PA5, PA15};
 use gpio::{AF2, AF5};

@@ -130,7 +130,7 @@ macro_rules! dma {
                 use core::marker::Unsize;
                 use core::sync::atomic::{self, Ordering};
 
-                use stm32l0::stm32l0x1::{dma1, $DMAX};
+                use stm32l052::{dma1, $DMAX};
                 
                 use dma::{CircBuffer, DmaExt, Error, Event, Half, Transfer, W};
                 use rcc::AHB;

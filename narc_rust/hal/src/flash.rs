@@ -2,7 +2,7 @@
 
 /// Flash abstraction.
 
-use stm32l0::stm32l0x1::{FLASH, flash};
+use stm32l052::{FLASH, flash};
 
 pub trait FlashExt {
     fn constrain(self) -> Parts;

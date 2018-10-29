@@ -4,7 +4,6 @@
 
 extern crate cortex_m;
 extern crate cortex_m_rt;
-extern crate stm32l0;
 extern crate hal;
 extern crate embedded_hal;
 #[macro_use(block)]
@@ -16,7 +15,7 @@ use cortex_m::asm::bkpt;
 
 use embedded_hal::prelude::*;
 
-use stm32l0::stm32l0x1;
+use hal::stm32l052;
 use hal::rcc::RccExt;
 use hal::gpio::GpioExt;
 use hal::flash::FlashExt;
@@ -27,7 +26,7 @@ use cortex_m_rt::entry;
 
 #[entry]
 fn main() -> ! {
-    let hw = stm32l0x1::Peripherals::take().unwrap();
+    let hw = stm32l052::Peripherals::take().unwrap();
 
     let mut rcc = hw.RCC.constrain();
     let mut flash = hw.FLASH.constrain();

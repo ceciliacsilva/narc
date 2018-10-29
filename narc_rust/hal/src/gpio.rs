@@ -61,7 +61,7 @@ macro_rules! gpio {
         pub mod $gpiox {
             use core::marker::PhantomData;
 
-            use stm32l0::stm32l0x1::{$gpioy, $GPIOX};
+            use stm32l052::{$gpioy, $GPIOX};
             use rcc::IOP;
 
             use super::*;

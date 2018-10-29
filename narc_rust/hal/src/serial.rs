@@ -6,7 +6,7 @@ use cast::u16;
 use nb;
 use embedded_hal::serial::{Read, Write};
 
-use stm32l0::stm32l0x1::USART2;
+use stm32l052::USART2;
 
 use gpio::gpioa::{PA2, PA3};
 use gpio::{AF4};

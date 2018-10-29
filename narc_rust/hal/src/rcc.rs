@@ -1,6 +1,6 @@
 //! Reset and Clock Control
 
-use stm32l0::stm32l0x1::{RCC, rcc};
+use stm32l052::{RCC, rcc};
 
 use cast::u32;
 

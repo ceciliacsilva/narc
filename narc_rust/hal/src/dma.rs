@@ -161,29 +161,33 @@ macro_rules! dma {
                             }
                         }
 
-                        pub(crate) fn isr(&self) -> dma1::isr::R {
+                        pub(crate) fn isr(&self) -> $dmaX::isr::R {
                             // NOTE(unsafe) atomic read with no side effects
                             unsafe { (*$DMAX::ptr()).isr.read() }
                         }
 
-                        pub(crate) fn ifcr(&self) -> &dma1::IFCR {
+                        pub(crate) fn ifcr(&self) -> &$dmaX::IFCR {
                             unsafe { &(*$DMAX::ptr()).ifcr }
                         }
 
-                        pub(crate) fn ccr(&mut self) -> &dma1::$CCRX {
+                        pub(crate) fn ccr(&mut self) -> &$dmaX::$CCRX {
                             unsafe { &(*$DMAX::ptr()).$ccrX }
                         }
 
-                        pub(crate) fn cndtr(&mut self) -> &dma1::$CNDTRX {
+                        pub(crate) fn cndtr(&mut self) -> &$dmaX::$CNDTRX {
                             unsafe { &(*$DMAX::ptr()).$cndtrX }
                         }
 
-                        pub(crate) fn cpar(&mut self) -> &dma1::$CPARX {
+                        pub(crate) fn cpar(&mut self) -> &$dmaX::$CPARX {
                             unsafe { &(*$DMAX::ptr()).$cparX }
                         }
 
-                        pub(crate) fn cmar(&mut self) -> &dma1::$CMARX {
+                        pub(crate) fn cmar(&mut self) -> &$dmaX::$CMARX {
                             unsafe { &(*$DMAX::ptr()).$cmarX }
+                        }
+
+                        pub(crate) fn cselr(&mut self) -> &$dmaX::CSELR {
+                            unsafe { &(*$DMAX::ptr()).cselr }
                         }
 
                         pub(crate) fn get_cndtr(&self) -> u32 {
@@ -271,6 +275,10 @@ macro_rules! dma {
                             // to get to that state with our type safe API and *safe* Rust.
                             while !self.is_done() {}
 
+                            // use cortex_m::asm::bkpt;
+
+                            // bkpt();
+
                             self.channel.ifcr().write(|w| w.$cgifX().set_bit());
 
                             self.channel.ccr().modify(|_, w| w.en().clear_bit());
@@ -305,7 +313,7 @@ macro_rules! dma {
                     fn split(self, ahb: &mut AHB) -> Channels {
                         ahb.enr().modify(|_, w| w.$dmaXen().set_bit());
                         ahb.rstr().modify(|_, w| w.$dmaXrst().set_bit());
-                        ahb.rstr().modify(|_, w| w.$dmaXrst().set_bit());
+                        ahb.rstr().modify(|_, w| w.$dmaXrst().clear_bit());
 
                         // reset the DMA control registers (stops all on-going transfers)
                         $(

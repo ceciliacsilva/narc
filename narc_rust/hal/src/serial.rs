@@ -58,8 +58,10 @@ macro_rules! usart {
             $usartXen:ident,
             $usartXrst:ident,
             $APB:ident,
-            rx: $rx_chan:path,
-            tx: $tx_chan:path
+            $DMAX:ident,
+            csel: $csel_value:expr,
+            rx: $rx_chan:path, $csr:ident,
+            tx: $tx_chan:path, $cst:ident
         ),
     )+) => {
         $(
@@ -167,6 +169,9 @@ macro_rules! usart {
                         chan.cpar().write(|w| unsafe {
                             w.pa().bits(&(*$USARTX::ptr()).rdr as *const _ as usize as u32)
                         });
+                        chan.cselr().modify(|_, w| unsafe {
+                            w.$csr().bits($csel_value)
+                        } );
 
                         // TODO can we weaken this compiler barrier?
                         // NOTE(compiler_fence) operations on `buffer` should not be reordered after
@@ -177,26 +182,26 @@ macro_rules! usart {
                         let bit_8 = 0b00;
                         chan.ccr().modify(|_, w| unsafe {
                             w.mem2mem()
-                                .clear_bit()
-                                .pl()
-                                // .medium()
-                                .bits(medium)
-                                .msize()
-                                // .bit8()
-                                .bits(bit_8)
-                                .psize()
-                                // .bit8()
-                                .bits(bit_8)
-                                .minc()
-                                .set_bit()
-                                .pinc()
-                                .clear_bit()
-                                .circ()
-                                .set_bit()
-                                .dir()
-                                .clear_bit()
-                                .en()
-                                .set_bit()
+                            .clear_bit()
+                            .pl()
+                            // .medium()
+                            .bits(medium)
+                            .msize()
+                            // .bit8()
+                            .bits(bit_8)
+                            .psize()
+                            // .bit8()
+                            .bits(bit_8)
+                            .minc()
+                            .set_bit()
+                            .pinc()
+                            .clear_bit()
+                            .circ()
+                            .set_bit()
+                            .dir()
+                            .clear_bit()
+                            .en()
+                            .set_bit()
                         });
                     }
 
@@ -222,6 +227,9 @@ macro_rules! usart {
                         chan.cpar().write(|w| unsafe {
                             w.pa().bits(&(*$USARTX::ptr()).rdr as *const _ as usize as u32)
                         });
+                        chan.cselr().modify(|_, w| unsafe {
+                            w.$csr().bits($csel_value)
+                        } );
 
                         // TODO can we weaken this compiler barrier?
                         // NOTE(compiler_fence) operations on `buffer` should not be reordered after
@@ -232,26 +240,26 @@ macro_rules! usart {
                         let bit_8 = 0b00;
                         chan.ccr().modify(|_, w| unsafe {
                             w.mem2mem()
-                                .clear_bit()
-                                .pl()
-                                // .medium()
-                                .bits(medium)
-                                .msize()
-                                // .bit8()
-                                .bits(bit_8)
-                                .psize()
-                                // .bit8()
-                                .bits(bit_8)
-                                .minc()
-                                .set_bit()
-                                .pinc()
-                                .clear_bit()
-                                .circ()
-                                .clear_bit()
-                                .dir()
-                                .clear_bit()
-                                .en()
-                                .set_bit()
+                            .clear_bit()
+                            .pl()
+                            // .medium()
+                            .bits(medium)
+                            .msize()
+                            // .bit8()
+                            .bits(bit_8)
+                            .psize()
+                            // .bit8()
+                            .bits(bit_8)
+                            .minc()
+                            .set_bit()
+                            .pinc()
+                            .clear_bit()
+                            .circ()
+                            .clear_bit()
+                            .dir()
+                            .clear_bit()
+                            .en()
+                            .set_bit()
                             });
                         }
 
@@ -280,7 +288,9 @@ macro_rules! usart {
                         chan.cpar().write(|w| unsafe {
                             w.pa().bits(&(*$USARTX::ptr()).tdr as *const _ as usize as u32)
                         });
-
+                        chan.cselr().modify(|_, w| unsafe {
+                            w.$cst().bits($csel_value)
+                        } );
                         // TODO can we weaken this compiler barrier?
                         // NOTE(compiler_fence) operations on `buffer` should not be reordered after
                         // the next statement, which starts the DMA transfer
@@ -290,26 +300,26 @@ macro_rules! usart {
                         let bit_8 = 0b00;
                         chan.ccr().modify(|_, w| unsafe {
                             w.mem2mem()
-                                .clear_bit()
-                                .pl()
-                                // .medium()
-                                .bits(medium)
-                                .msize()
-                                // .bit8()
-                                .bits(bit_8)
-                                .psize()
-                                // .bit8()
-                                .bits(bit_8)
-                                .minc()
-                                .set_bit()
-                                .pinc()
-                                .clear_bit()
-                                .circ()
-                                .clear_bit()
-                                .dir()
-                                .set_bit()
-                                .en()
-                                .set_bit()
+                            .clear_bit()
+                            .pl()
+                            // .medium()
+                            .bits(medium)
+                            .msize()
+                            // .bit8()
+                            .bits(bit_8)
+                            .psize()
+                            // .bit8()
+                            .bits(bit_8)
+                            .minc()
+                            .set_bit()
+                            .pinc()
+                            .clear_bit()
+                            .circ()
+                            .clear_bit()
+                            .dir()
+                            .set_bit()
+                            .en()
+                            .set_bit()
                         });
                     }
 
@@ -358,8 +368,10 @@ usart! {
         usart2en,
         usart2rst,
         APB1,
-        rx: dma1::C4,
-        tx: dma1::C5
+        dma1,
+        csel: 0b0100,
+        rx: dma1::C5, c5s,
+        tx: dma1::C4, c4s
     ),
 }
 

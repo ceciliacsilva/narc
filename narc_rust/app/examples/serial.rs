@@ -24,7 +24,6 @@ use hal::flash::FlashExt;
 use hal::serial::Serial;
 use hal::time::U32Ext;
 use hal::dma::DmaExt;
-use hal::stm32l052::Interrupt::DMA1_CHANNEL4_7;
 
 use cortex_m_rt::entry;
 
@@ -52,61 +51,30 @@ fn main() -> ! {
 
     let (mut tx, mut rx) = serial.split();
 
-    // let buf = singleton!(: [[u8; 8]; 2] = [[0; 8]; 2]).unwrap();
-    let buf = singleton!(: [u8; 8] = [97; 8]).unwrap();
+    let buf_r = singleton!(: [[u8; 8]; 2] = [[0; 8]; 2]).unwrap();
+    let buf_s = singleton!(: [u8; 8] = [97; 8]).unwrap();
 
-    // channels.5.listen(Event::HalfTransfer);
-    // channels.5.listen(Event::TransferComplete);
+    channels.5.listen(Event::HalfTransfer);
+    channels.5.listen(Event::TransferComplete);
 
     channels.4.listen(Event::TransferComplete);
-    // channels.4.listen(Event::HalfTransfer);
 
     let sent = b'X';
     block!(tx.write(sent)).ok();
 
-    let (_buf, _c, mut tx) = tx.write_all(channels.4, buf).wait();
-    
-    // bkpt();
+    let (_buf, _c, mut tx) = tx.write_all(channels.4, buf_s).wait();
 
-    // let (_buf, _c, _rx) = rx.read_exact(channels.5, buf).wait();
+    let mut circ_buffer = rx.circ_buf(channels.5, buf_r);
+    while circ_buffer.readable_half().unwrap() != Half::First {}
+    let _first_half = circ_buffer.peek(|half, _| *half).unwrap();
 
-    // while circ_buffer.readable_half().unwrap() != Half::First {}
-
-    // let _first_half = circ_buffer.peek(|half, _| *half).unwrap();
-
+    while circ_buffer.readable_half().unwrap() != Half::Second {}
+    let _second_half = circ_buffer.peek(|half, _| *half).unwrap();
 
     let sent = b'Y';
     block!(tx.write(sent)).ok();
 
-    // while circ_buffer.readable_half().unwrap() != Half::First {}
-
-    // let _first_half = circ_buffer.peek(|half, _| *half).unwrap();
-
-    // while circ_buffer.readable_half().unwrap() != Half::Second {}
-
-    // let _second_half = circ_buffer.peek(|half, _| *half).unwrap();
-
-    // bkpt();
-
-
-    // let sent = b'X';
-
-    // block!(tx.write(sent)).ok();
-
-    // let received = block!(rx.read()).unwrap();
-
-    // assert_eq!(received, sent);
-
-    // bkpt();
-
     loop{
-        // while circ_buffer.readable_half().unwrap() != Half::First {}
-        // let _first_half = circ_buffer.peek(|half, _| *half).unwrap();
-
-        // let received = block!(rx.read()).unwrap();
-
-        // // let sent = b'X';
-        // block!(tx.write(received)).ok();
     }
 }
 

@@ -58,7 +58,6 @@ macro_rules! usart {
             $usartXen:ident,
             $usartXrst:ident,
             $APB:ident,
-            $DMAX:ident,
             csel: $csel_value:expr,
             rx: $rx_chan:path, $csr:ident,
             tx: $tx_chan:path, $cst:ident
@@ -368,7 +367,6 @@ usart! {
         usart2en,
         usart2rst,
         APB1,
-        dma1,
         csel: 0b0100,
         rx: dma1::C5, c5s,
         tx: dma1::C4, c4s

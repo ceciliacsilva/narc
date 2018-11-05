@@ -50,7 +50,7 @@ fn blinky() {
 
     let max = pwm.get_max_duty();
     pwm.enable();
-    pwm.set_duty(max / 2);
+    pwm.set_duty(max / 4);
 }
 
 #[allow(deprecated)]

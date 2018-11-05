@@ -1,5 +1,5 @@
 [package]
-name = "narc_hal"
+name = "hal"
 version = "0.1.2"
 authors = ["Cecília Carneiro <cecilia.carneiroesilva@gmail.com>"]
 description = "..."

@@ -263,7 +263,7 @@ macro_rules! gpio {
                     pub fn into_input (self, moder: &mut MODER) -> $PXi<InputDigital> {
                         let offset = 2 * $i;
 
-                        let mode = 0b11;
+                        let mode = 0b00;
                         moder.moder().modify(|r, w| unsafe {
                             w.bits((r.bits() & !(0b11 << offset)) | (mode << offset)) });
 

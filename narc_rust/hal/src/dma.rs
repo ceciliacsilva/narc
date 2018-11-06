@@ -10,6 +10,7 @@ pub enum Error {
     Overrun,
     #[doc(hidden)]
     _Extensible,
+    BufferError,
 }
 
 pub enum Event {
@@ -39,6 +40,26 @@ impl<BUFFER, CHANNEL> CircBuffer<BUFFER, CHANNEL> {
             channel: chan,
             readable_half: Half::Second,
         }
+    }
+}
+
+pub struct CircBufferLinear<BUFFER, CHANNEL>
+where 
+    BUFFER: 'static,
+{
+    buffer: &'static mut [BUFFER; 1],
+    channel: CHANNEL,
+    consumed_offset: usize,
+}
+
+impl<BUFFER, CHANNEL> CircBufferLinear<BUFFER, CHANNEL> {
+    pub (crate) fn new(buf: &'static mut [BUFFER; 1], chan: CHANNEL) -> Self {
+        CircBufferLinear {
+            buffer: buf,
+            channel: chan,
+            consumed_offset: 0,
+        }
+
     }
 }
 
@@ -132,7 +153,7 @@ macro_rules! dma {
 
                 use stm32l052::{dma1, $DMAX};
                 
-                use dma::{CircBuffer, DmaExt, Error, Event, Half, Transfer, W};
+                use dma::{CircBuffer, CircBufferLinear, DmaExt, Error, Event, Half, Transfer, W};
                 use rcc::AHB;
 
                 pub struct Channels((), $(pub $CX),+);
@@ -195,6 +216,34 @@ macro_rules! dma {
                             unsafe { (*$DMAX::ptr()).$cndtrX.read().bits() }
                         }
 
+                    }
+
+                    impl<B> CircBufferLinear<B, $CX> {
+                        pub fn partial_peek<T>(&mut self) -> (&[T], &[T])
+                        where B: Unsize<[T]>
+                        {
+                            let buf = &self.buffer[0];
+
+                            let pending = self.channel.get_cndtr() as usize; // available bytes in _whole_ buffer
+
+                            let slice: &[T] = buf;
+                            let capacity = slice.len(); // capacity of _half_ a buffer
+
+                            let end = capacity - pending;
+
+                            let slice_empty: &[T] = &[];
+
+                            let (buf1, buf2) = 
+                                if self.consumed_offset <= end {
+                                    (&slice[self.consumed_offset..end], slice_empty)
+                                } else {
+                                    (&slice[self.consumed_offset..capacity], &slice[0..end])
+                                };
+                            
+                            self.consumed_offset = end;
+                            
+                            (buf1, buf2)
+                        }
                     }
 
                     impl<B> CircBuffer<B, $CX> {
@@ -289,6 +338,14 @@ macro_rules! dma {
                             atomic::compiler_fence(Ordering::SeqCst);
 
                             (self.buffer, self.channel, self.payload)
+                        }
+
+                        pub fn stop(&mut self){
+                            self.channel.ccr().modify(|_, w| w.en().clear_bit());
+                        }
+
+                        pub fn restart(&mut self) {
+                            self.channel.ccr().modify(|_, w| w.en().set_bit());
                         }
                     }
 

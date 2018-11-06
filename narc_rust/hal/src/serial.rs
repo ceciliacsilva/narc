@@ -10,7 +10,7 @@ use stm32l052::USART2;
 
 use gpio::gpioa::{PA2, PA3};
 use gpio::{AF4};
-use dma::{dma1, CircBuffer, Static, Transfer, R, W};
+use dma::{dma1, CircBuffer, CircBufferLinear, Static, Transfer, R, W};
 use rcc::{APB1, Clocks};
 use time::Bps;
 
@@ -18,6 +18,7 @@ use time::Bps;
 pub enum Event {
     Rxne,
     Txe,
+    Cmie,
 }
 
 #[derive(Debug)]
@@ -86,6 +87,8 @@ macro_rules! usart {
                     assert!(brr >= 16, "impossible baud rate");
                     usart.brr.write(|w| unsafe { w.bits(brr) });
 
+                    usart.cr2.modify(|_, w| unsafe{ w.add4_7().bits(0).add0_3().bits(10) });
+
                     usart
                         .cr1
                         .write(|w| w.ue().set_bit().re().set_bit().te().set_bit());
@@ -97,6 +100,7 @@ macro_rules! usart {
                     match event {
                         Event::Rxne => self.usart.cr1.modify(|_, w| w.rxneie().set_bit()),
                         Event::Txe => self.usart.cr1.modify(|_, w| w.txeie().set_bit()),
+                        Event::Cmie => self.usart.cr1.modify(|_, w| w.cmie().set_bit()),
                     }
                 }
 
@@ -104,6 +108,7 @@ macro_rules! usart {
                     match event {
                         Event::Rxne => self.usart.cr1.modify(|_, w| w.rxneie().clear_bit()),
                         Event::Txe => self.usart.cr1.modify(|_, w| w.txeie().clear_bit()),
+                        Event::Cmie => self.usart.cr1.modify(|_, w| w.cmie().clear_bit()),
                     }
                 }
 
@@ -121,6 +126,10 @@ macro_rules! usart {
                         },
                     )
                 }
+            }
+
+            pub fn clear_isr_cmie(){
+                unsafe { (*$USARTX::ptr()).icr.write(|w| w.cmcf().set_bit()) };
             }
 
             impl Read<u8> for Rx<$USARTX> {
@@ -205,6 +214,64 @@ macro_rules! usart {
                     }
 
                     CircBuffer::new(buffer, chan)
+                }
+
+                pub fn circ_buf_linear<B>(
+                    self,
+                    mut chan: $rx_chan,
+                    buffer: &'static mut [B; 1],
+                ) -> CircBufferLinear<B, $rx_chan> 
+                where 
+                    B: Unsize<[u8]>
+                {
+                    {
+                        let buffer: &[u8] = &buffer[0];
+                        chan.cmar().write(|w| unsafe {
+                            w.ma().bits(buffer.as_ptr() as usize as u32)
+                        });
+                        chan.cndtr().write(|w| unsafe{
+                            w.ndt().bits(u16(buffer.len() * 1).unwrap())
+                        });
+                        chan.cpar().write(|w| unsafe {
+                            w.pa().bits(&(*$USARTX::ptr()).rdr as *const _ as usize as u32)
+                        });
+                        chan.cselr().modify(|_, w| unsafe {
+                            w.$csr().bits($csel_value)
+                        } );
+
+                        // TODO can we weaken this compiler barrier?
+                        // NOTE(compiler_fence) operations on `buffer` should not be reordered after
+                        // the next statement, which starts the DMA transfer
+                        atomic::compiler_fence(Ordering::SeqCst);
+
+                        let medium = 0b01;
+                        let bit_8 = 0b00;
+                        chan.ccr().modify(|_, w| unsafe {
+                            w.mem2mem()
+                            .clear_bit()
+                            .pl()
+                            // .medium()
+                            .bits(medium)
+                            .msize()
+                            // .bit8()
+                            .bits(bit_8)
+                            .psize()
+                            // .bit8()
+                            .bits(bit_8)
+                            .minc()
+                            .set_bit()
+                            .pinc()
+                            .clear_bit()
+                            .circ()
+                            .set_bit()
+                            .dir()
+                            .clear_bit()
+                            .en()
+                            .set_bit()
+                        });
+                    }
+
+                    CircBufferLinear::new(buffer, chan)
                 }
             
                 pub fn read_exact<B>(

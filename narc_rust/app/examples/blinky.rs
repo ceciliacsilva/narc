@@ -19,6 +19,9 @@ use hal::pwm::PwmExt;
 use hal::flash::FlashExt;
 use hal::time::U32Ext;
 
+use embedded_hal::digital::OutputPin;
+use embedded_hal::digital::InputPin;
+
 use embedded_hal::PwmPin;
 use cortex_m_rt::entry;
 
@@ -50,7 +53,26 @@ fn blinky() {
 
     let max = pwm.get_max_duty();
     pwm.enable();
+<<<<<<< HEAD
     pwm.set_duty(max / 4);
+=======
+    pwm.set_duty(max / 2);
+
+    // let mut led = gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
+    // let bot = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
+
+    // loop{
+    //     if bot.is_high(){
+    //         led.set_high();
+    //     } else {
+    //         led.set_low();
+    //     }
+    // }
+
+    loop{
+
+    }
+>>>>>>> upstream/master
 }
 
 #[allow(deprecated)]

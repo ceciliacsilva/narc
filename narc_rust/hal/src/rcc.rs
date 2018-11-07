@@ -15,6 +15,7 @@ pub trait RccExt {
 impl RccExt for RCC {
     fn constrain(self) -> Rcc {
         Rcc {
+            ahb: AHB { _0: () },
             iop: IOP { _0: () },
             apb1: APB1 { _0: () },
             apb2: APB2 { _0: () },
@@ -30,7 +31,7 @@ impl RccExt for RCC {
 
 // TODO. It is not complete.
 pub struct Rcc {
-    // TODO AHB
+    pub ahb: AHB,
     pub apb1: APB1,
     pub apb2: APB2,
     pub iop: IOP,
@@ -76,6 +77,20 @@ impl APB2 {
 
     pub(crate) fn rstr (&mut self) -> &rcc::APB2RSTR {
         unsafe { &(*RCC::ptr()).apb2rstr }
+    }
+}
+
+pub struct AHB {
+    _0: (),
+}
+
+impl AHB {
+    pub(crate) fn enr (&mut self) -> &rcc::AHBENR {
+        unsafe { &(*RCC::ptr()).ahbenr }
+    }
+
+    pub(crate) fn rstr (&mut self) -> &rcc::AHBRSTR {
+        unsafe { &(*RCC::ptr()).ahbrstr }
     }
 }
 

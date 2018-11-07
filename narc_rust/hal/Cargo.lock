@@ -74,6 +74,7 @@ dependencies = [
  "cortex-m 0.5.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "cortex-m-rt 0.5.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "embedded-hal 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "nb 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "panic-semihosting 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "stm32l0 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]

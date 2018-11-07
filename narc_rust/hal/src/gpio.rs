@@ -179,7 +179,7 @@ macro_rules! gpio {
 
                 impl $PXi<Alternate> {
                     //TODO all others.
-                    pub fn af4(self, afrl: &mut AFRL) -> $PXi<AF4> {
+                    pub fn af4(self, afrl: &mut AFRH) -> $PXi<AF4> {
                         let af = 4;
                         let offset = 4 * ($i % 8);
 

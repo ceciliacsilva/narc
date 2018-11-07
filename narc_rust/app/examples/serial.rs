@@ -38,15 +38,15 @@ fn main() -> ! {
     let mut channels = hw.DMA1.split(&mut rcc.ahb);
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
-    let tx = gpioa.pa2.into_alternate(&mut gpioa.moder).af4(&mut gpioa.afrl);
-    let rx = gpioa.pa3.into_alternate(&mut gpioa.moder).af4(&mut gpioa.afrl);
+    let tx = gpioa.pa9.into_alternate(&mut gpioa.moder).af4(&mut gpioa.afrh);
+    let rx = gpioa.pa10.into_alternate(&mut gpioa.moder).af4(&mut gpioa.afrh);
 
-    let serial = Serial::usart2(
-        hw.USART2,
+    let serial = Serial::usart1(
+        hw.USART1,
         (tx, rx),
         9_600.bps(),
         clocks,
-        &mut rcc.apb1,
+        &mut rcc.apb2,
         None,
     );
 
@@ -55,17 +55,17 @@ fn main() -> ! {
     let buf_r = singleton!(: [[u8; 8]; 2] = [[0; 8]; 2]).unwrap();
     let buf_s = singleton!(: [u8; 8] = [97; 8]).unwrap();
 
-    channels.5.listen(Event::HalfTransfer);
-    channels.5.listen(Event::TransferComplete);
+    channels.3.listen(Event::HalfTransfer);
+    channels.3.listen(Event::TransferComplete);
 
-    channels.4.listen(Event::TransferComplete);
+    channels.2.listen(Event::TransferComplete);
 
     let sent = b'X';
     block!(tx.write(sent)).ok();
 
-    let (_buf, _c, mut tx) = tx.write_all(channels.4, buf_s).wait();
+    let (_buf, _c, mut tx) = tx.write_all(channels.2, buf_s).wait();
 
-    let mut circ_buffer = rx.circ_buf(channels.5, buf_r);
+    let mut circ_buffer = rx.circ_buf(channels.3, buf_r);
     while circ_buffer.readable_half().unwrap() != Half::First {}
     let _first_half = circ_buffer.peek(|half, _| *half).unwrap();
 

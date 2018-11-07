@@ -6,12 +6,12 @@ use cast::u16;
 use nb;
 use embedded_hal::serial::{Read, Write};
 
-use stm32l052::USART2;
+use stm32l052::{USART2, USART1};
 
-use gpio::gpioa::{PA2, PA3};
+use gpio::gpioa::{PA2, PA3, PA9, PA10};
 use gpio::{AF4};
 use dma::{dma1, CircBuffer, CircBufferLinear, Static, Transfer, R, W};
-use rcc::{APB1, Clocks};
+use rcc::{APB1, APB2, Clocks};
 use time::Bps;
 
 
@@ -36,6 +36,10 @@ pub trait Pins<USART> {}
 /// PA2 - USART2_tx PA3 - USART2_rx
 impl Pins<USART2> for (PA2<AF4>, PA3<AF4>) {}
 
+/// PA2 - USART2_tx PA3 - USART2_rx
+impl Pins<USART1> for (PA9<AF4>, PA10<AF4>) {}
+
+
 /// Serial Abstraction
 pub struct Serial<USART, PINS> {
     usart: USART,
@@ -50,6 +54,14 @@ pub struct Rx<USART> {
 /// Serial transmitter
 pub struct Tx<USART> {
     _usart: PhantomData<USART>,
+}
+
+pub struct ReleaseInterupt<USART> {
+    _usart: PhantomData<USART>,
+}
+
+pub trait ClearInterupt {
+    fn clear_isr_cmie(&mut self);
 }
 
 macro_rules! usart {
@@ -72,6 +84,7 @@ macro_rules! usart {
                     baud_rate: Bps,
                     clocks: Clocks,
                     apb: &mut $APB,
+                    character_match: Option<u8>,
                 ) -> Self
                 where 
                     PINS: Pins<$USARTX>
@@ -87,8 +100,13 @@ macro_rules! usart {
                     assert!(brr >= 16, "impossible baud rate");
                     usart.brr.write(|w| unsafe { w.bits(brr) });
 
-                    usart.cr2.modify(|_, w| unsafe{ w.add4_7().bits(0).add0_3().bits(10) });
+                    if let Some(value) = character_match {
+                        let add4_7 = value / 16;
+                        let add0_3 = value % 16;
 
+                        usart.cr2.modify(|_, w| unsafe{ w.add4_7().bits(add4_7).add0_3().bits(add0_3) });
+                    }
+                    
                     usart
                         .cr1
                         .write(|w| w.ue().set_bit().re().set_bit().te().set_bit());
@@ -116,7 +134,7 @@ macro_rules! usart {
                     (self.usart, self.pins)
                 }
 
-                pub fn split(self) -> (Tx<$USARTX>, Rx<$USARTX>) {
+                pub fn split(self) -> (Tx<$USARTX>, Rx<$USARTX>, ReleaseInterupt<$USARTX>) {
                     (
                         Tx {
                             _usart: PhantomData,
@@ -124,14 +142,19 @@ macro_rules! usart {
                         Rx {
                             _usart: PhantomData,
                         },
+                        ReleaseInterupt {
+                            _usart: PhantomData,
+                        },
                     )
                 }
             }
 
-            pub fn clear_isr_cmie(){
-                unsafe { (*$USARTX::ptr()).icr.write(|w| w.cmcf().set_bit()) };
+            impl ClearInterupt for ReleaseInterupt<$USARTX> {
+                fn clear_isr_cmie(&mut self) {
+                    unsafe { (*$USARTX::ptr()).icr.write(|w| w.cmcf().set_bit()) };
+                }
             }
-
+            
             impl Read<u8> for Rx<$USARTX> {
                 type Error = Error;
 
@@ -179,7 +202,7 @@ macro_rules! usart {
                         });
                         chan.cselr().modify(|_, w| unsafe {
                             w.$csr().bits($csel_value)
-                        } );
+                        });
 
                         // TODO can we weaken this compiler barrier?
                         // NOTE(compiler_fence) operations on `buffer` should not be reordered after
@@ -237,7 +260,7 @@ macro_rules! usart {
                         });
                         chan.cselr().modify(|_, w| unsafe {
                             w.$csr().bits($csel_value)
-                        } );
+                        });
 
                         // TODO can we weaken this compiler barrier?
                         // NOTE(compiler_fence) operations on `buffer` should not be reordered after
@@ -295,7 +318,7 @@ macro_rules! usart {
                         });
                         chan.cselr().modify(|_, w| unsafe {
                             w.$csr().bits($csel_value)
-                        } );
+                        });
 
                         // TODO can we weaken this compiler barrier?
                         // NOTE(compiler_fence) operations on `buffer` should not be reordered after
@@ -356,7 +379,7 @@ macro_rules! usart {
                         });
                         chan.cselr().modify(|_, w| unsafe {
                             w.$cst().bits($csel_value)
-                        } );
+                        });
                         // TODO can we weaken this compiler barrier?
                         // NOTE(compiler_fence) operations on `buffer` should not be reordered after
                         // the next statement, which starts the DMA transfer
@@ -440,3 +463,14 @@ usart! {
     ),
 }
 
+usart! {
+    USART1: (
+        usart1,
+        usart1en,
+        usart1rst,
+        APB2,
+        csel: 0b0011,
+        rx: dma1::C3, c3s,
+        tx: dma1::C2, c2s
+    ),
+}

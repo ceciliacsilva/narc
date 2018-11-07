@@ -47,9 +47,10 @@ fn main() -> ! {
         9_600.bps(),
         clocks,
         &mut rcc.apb1,
+        None,
     );
 
-    let (mut tx, mut rx) = serial.split();
+    let (mut tx, mut rx, _) = serial.split();
 
     let buf_r = singleton!(: [[u8; 8]; 2] = [[0; 8]; 2]).unwrap();
     let buf_s = singleton!(: [u8; 8] = [97; 8]).unwrap();

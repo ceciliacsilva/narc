@@ -61,7 +61,7 @@ macro_rules! gpio {
         pub mod $gpiox {
             use core::marker::PhantomData;
 
-            use stm32l0::stm32l0x1::{$gpioy, $GPIOX};
+            use stm32l052::{$gpioy, $GPIOX};
             use rcc::IOP;
 
             use super::*;
@@ -179,22 +179,23 @@ macro_rules! gpio {
 
                 impl $PXi<Alternate> {
                     //TODO all others.
-                    pub fn af4(self, afrl: &mut AFRL) -> $PXi<AF4> {
+                    pub fn af4(self, afr: &mut $CR) -> $PXi<AF4> {
                         let af = 4;
                         let offset = 4 * ($i % 8);
 
-                        afrl.afr().modify(|r, w| unsafe {
+                        afr.afr().modify(|r, w| unsafe {
                             w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
                         });
 
                         $PXi { _mode: PhantomData }
                     }
 
-                    pub fn af5(self, afrl: &mut AFRL) -> $PXi<AF5> {
+                    pub fn af5(self, afr: &mut $CR) -> $PXi<AF5>
+                    {
                         let af = 5;
                         let offset = 4 * ($i % 8);
 
-                        afrl.afr().modify(|r, w| unsafe {
+                        afr.afr().modify(|r, w| unsafe {
                             w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
                         });
 

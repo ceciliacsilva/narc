@@ -4,7 +4,6 @@
 
 extern crate cortex_m;
 extern crate cortex_m_rt;
-extern crate stm32l0;
 extern crate hal;
 extern crate embedded_hal;
 
@@ -12,7 +11,7 @@ use core::panic::PanicInfo;
 use core::sync::atomic::{self, Ordering};
 use cortex_m::asm::bkpt;
 
-use stm32l0::stm32l0x1;
+use hal::stm32l052;
 use hal::rcc::RccExt;
 use hal::gpio::GpioExt;
 use hal::pwm::PwmExt;
@@ -33,7 +32,7 @@ fn main() -> ! {
 }
 
 fn blinky() {
-    let hw = stm32l0x1::Peripherals::take().unwrap();
+    let hw = stm32l052::Peripherals::take().unwrap();
 
     let mut rcc = hw.RCC.constrain();
     let mut flash = hw.FLASH.constrain();

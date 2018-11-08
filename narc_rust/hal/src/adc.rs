@@ -1,4 +1,4 @@
-use stm32l0::stm32l0x1::ADC;
+use stm32l052::ADC;
 use rcc::APB2;
 
 use cortex_m::asm::bkpt;

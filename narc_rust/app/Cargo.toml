@@ -1,9 +1,10 @@
 [package]
-name = "narc-rust"
+name = "narc_app"
 version = "0.1.0"
 description = "NARC Project"
 authors = ["Cecília Carneiro <cecilia.carneiroesilva@gmail.com>"]
 repository = "https://github.com/ceciliacsilva/narc"
+license = "MIT"
 
 [dependencies]
 cortex-m = "0.5.6"

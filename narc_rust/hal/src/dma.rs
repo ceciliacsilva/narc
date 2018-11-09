@@ -10,6 +10,7 @@ pub enum Error {
     Overrun,
     #[doc(hidden)]
     _Extensible,
+    BufferError,
 }
 
 pub enum Event {
@@ -39,6 +40,26 @@ impl<BUFFER, CHANNEL> CircBuffer<BUFFER, CHANNEL> {
             channel: chan,
             readable_half: Half::Second,
         }
+    }
+}
+
+pub struct CircBufferLinear<BUFFER, CHANNEL>
+where 
+    BUFFER: 'static,
+{
+    buffer: &'static mut [BUFFER; 1],
+    channel: CHANNEL,
+    consumed_offset: usize,
+}
+
+impl<BUFFER, CHANNEL> CircBufferLinear<BUFFER, CHANNEL> {
+    pub (crate) fn new(buf: &'static mut [BUFFER; 1], chan: CHANNEL) -> Self {
+        CircBufferLinear {
+            buffer: buf,
+            channel: chan,
+            consumed_offset: 0,
+        }
+
     }
 }
 
@@ -130,9 +151,9 @@ macro_rules! dma {
                 use core::marker::Unsize;
                 use core::sync::atomic::{self, Ordering};
 
-                use stm32l0::stm32l0x1::{dma1, $DMAX};
+                use stm32l052::{dma1, $DMAX};
                 
-                use dma::{CircBuffer, DmaExt, Error, Event, Half, Transfer, W};
+                use dma::{CircBuffer, CircBufferLinear, DmaExt, Error, Event, Half, Transfer, W};
                 use rcc::AHB;
 
                 pub struct Channels((), $(pub $CX),+);
@@ -161,29 +182,33 @@ macro_rules! dma {
                             }
                         }
 
-                        pub(crate) fn isr(&self) -> dma1::isr::R {
+                        pub(crate) fn isr(&self) -> $dmaX::isr::R {
                             // NOTE(unsafe) atomic read with no side effects
                             unsafe { (*$DMAX::ptr()).isr.read() }
                         }
 
-                        pub(crate) fn ifcr(&self) -> &dma1::IFCR {
+                        pub(crate) fn ifcr(&self) -> &$dmaX::IFCR {
                             unsafe { &(*$DMAX::ptr()).ifcr }
                         }
 
-                        pub(crate) fn ccr(&mut self) -> &dma1::$CCRX {
+                        pub(crate) fn ccr(&mut self) -> &$dmaX::$CCRX {
                             unsafe { &(*$DMAX::ptr()).$ccrX }
                         }
 
-                        pub(crate) fn cndtr(&mut self) -> &dma1::$CNDTRX {
+                        pub(crate) fn cndtr(&mut self) -> &$dmaX::$CNDTRX {
                             unsafe { &(*$DMAX::ptr()).$cndtrX }
                         }
 
-                        pub(crate) fn cpar(&mut self) -> &dma1::$CPARX {
+                        pub(crate) fn cpar(&mut self) -> &$dmaX::$CPARX {
                             unsafe { &(*$DMAX::ptr()).$cparX }
                         }
 
-                        pub(crate) fn cmar(&mut self) -> &dma1::$CMARX {
+                        pub(crate) fn cmar(&mut self) -> &$dmaX::$CMARX {
                             unsafe { &(*$DMAX::ptr()).$cmarX }
+                        }
+
+                        pub(crate) fn cselr(&mut self) -> &$dmaX::CSELR {
+                            unsafe { &(*$DMAX::ptr()).cselr }
                         }
 
                         pub(crate) fn get_cndtr(&self) -> u32 {
@@ -191,6 +216,34 @@ macro_rules! dma {
                             unsafe { (*$DMAX::ptr()).$cndtrX.read().bits() }
                         }
 
+                    }
+
+                    impl<B> CircBufferLinear<B, $CX> {
+                        pub fn partial_peek<T>(&mut self) -> (&[T], &[T])
+                        where B: Unsize<[T]>
+                        {
+                            let buf = &self.buffer[0];
+
+                            let pending = self.channel.get_cndtr() as usize; // available bytes in _whole_ buffer
+
+                            let slice: &[T] = buf;
+                            let capacity = slice.len(); // capacity of _half_ a buffer
+
+                            let end = capacity - pending;
+
+                            let slice_empty: &[T] = &[];
+
+                            let (buf1, buf2) = 
+                                if self.consumed_offset <= end {
+                                    (&slice[self.consumed_offset..end], slice_empty)
+                                } else {
+                                    (&slice[self.consumed_offset..capacity], &slice[0..end])
+                                };
+                            
+                            self.consumed_offset = end;
+                            
+                            (buf1, buf2)
+                        }
                     }
 
                     impl<B> CircBuffer<B, $CX> {
@@ -271,6 +324,10 @@ macro_rules! dma {
                             // to get to that state with our type safe API and *safe* Rust.
                             while !self.is_done() {}
 
+                            // use cortex_m::asm::bkpt;
+
+                            // bkpt();
+
                             self.channel.ifcr().write(|w| w.$cgifX().set_bit());
 
                             self.channel.ccr().modify(|_, w| w.en().clear_bit());
@@ -281,6 +338,14 @@ macro_rules! dma {
                             atomic::compiler_fence(Ordering::SeqCst);
 
                             (self.buffer, self.channel, self.payload)
+                        }
+
+                        pub fn stop(&mut self){
+                            self.channel.ccr().modify(|_, w| w.en().clear_bit());
+                        }
+
+                        pub fn restart(&mut self) {
+                            self.channel.ccr().modify(|_, w| w.en().set_bit());
                         }
                     }
 
@@ -305,7 +370,7 @@ macro_rules! dma {
                     fn split(self, ahb: &mut AHB) -> Channels {
                         ahb.enr().modify(|_, w| w.$dmaXen().set_bit());
                         ahb.rstr().modify(|_, w| w.$dmaXrst().set_bit());
-                        ahb.rstr().modify(|_, w| w.$dmaXrst().set_bit());
+                        ahb.rstr().modify(|_, w| w.$dmaXrst().clear_bit());
 
                         // reset the DMA control registers (stops all on-going transfers)
                         $(

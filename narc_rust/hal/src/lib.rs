@@ -1,12 +1,8 @@
-//! This crate requires `arm-none-eabi-gcc` to be installed and available in `$PATH` to build.
-//!
-//! # Usage
-
 #![no_std]
 #![feature(unsize)]
 #![feature(never_type)]
 
-pub extern crate stm32l0;
+pub extern crate stm32l052;
 extern crate embedded_hal;
 extern crate cortex_m;
 extern crate cast;

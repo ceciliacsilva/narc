@@ -2,9 +2,9 @@
 #![no_std]
 #![no_main]
 
+#[macro_use]
 extern crate cortex_m;
 extern crate cortex_m_rt;
-extern crate stm32l0;
 extern crate hal;
 extern crate embedded_hal;
 #[macro_use(block)]
@@ -16,49 +16,67 @@ use cortex_m::asm::bkpt;
 
 use embedded_hal::prelude::*;
 
-use stm32l0::stm32l0x1;
+use hal::stm32l052;
+use hal::dma::{Half, Event};
 use hal::rcc::RccExt;
 use hal::gpio::GpioExt;
 use hal::flash::FlashExt;
 use hal::serial::Serial;
 use hal::time::U32Ext;
+use hal::dma::DmaExt;
 
 use cortex_m_rt::entry;
 
 #[entry]
 fn main() -> ! {
-    let hw = stm32l0x1::Peripherals::take().unwrap();
+    let hw = stm32l052::Peripherals::take().unwrap();
 
     let mut rcc = hw.RCC.constrain();
     let mut flash = hw.FLASH.constrain();
 
     let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
+    let mut channels = hw.DMA1.split(&mut rcc.ahb);
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
-    let tx = gpioa.pa2.into_alternate(&mut gpioa.moder).af4(&mut gpioa.afrl);
-    let rx = gpioa.pa3.into_alternate(&mut gpioa.moder).af4(&mut gpioa.afrl);
+    let tx = gpioa.pa9.into_alternate(&mut gpioa.moder).af4(&mut gpioa.afrh);
+    let rx = gpioa.pa10.into_alternate(&mut gpioa.moder).af4(&mut gpioa.afrh);
 
-    let serial = Serial::usart2(
-        hw.USART2,
+    let serial = Serial::usart1(
+        hw.USART1,
         (tx, rx),
         9_600.bps(),
         clocks,
-        &mut rcc.apb1,
+        &mut rcc.apb2,
+        None,
     );
 
-    let (mut tx, mut rx) = serial.split();
+    let (mut tx, mut rx, _) = serial.split();
+
+    let buf_r = singleton!(: [[u8; 8]; 2] = [[0; 8]; 2]).unwrap();
+    let buf_s = singleton!(: [u8; 8] = [97; 8]).unwrap();
+
+    channels.3.listen(Event::HalfTransfer);
+    channels.3.listen(Event::TransferComplete);
+
+    channels.2.listen(Event::TransferComplete);
 
     let sent = b'X';
-
     block!(tx.write(sent)).ok();
 
-    let received = block!(rx.read()).unwrap();
+    let (_buf, _c, mut tx) = tx.write_all(channels.2, buf_s).wait();
 
-    assert_eq!(received, sent);
+    let mut circ_buffer = rx.circ_buf(channels.3, buf_r);
+    while circ_buffer.readable_half().unwrap() != Half::First {}
+    let _first_half = circ_buffer.peek(|half, _| *half).unwrap();
 
-    bkpt();
+    while circ_buffer.readable_half().unwrap() != Half::Second {}
+    let _second_half = circ_buffer.peek(|half, _| *half).unwrap();
 
-    loop{}
+    let sent = b'Y';
+    block!(tx.write(sent)).ok();
+
+    loop{
+    }
 }
 
 #[allow(deprecated)]

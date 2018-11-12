@@ -29,7 +29,7 @@ fn main() -> ! {
     
     let mut freq = 1;
     
-    let hw = stm32l0x1::Peripherals::take().unwrap();
+    let hw = stm32l052::Peripherals::take().unwrap();
 
         let mut rcc = hw.RCC.constrain();
         let mut flash = hw.FLASH.constrain();
@@ -63,13 +63,8 @@ fn main() -> ! {
     }
 }
 
-<<<<<<< HEAD
 /*fn blinky() {
-    let hw = stm32l0x1::Peripherals::take().unwrap();
-=======
-fn blinky() {
     let hw = stm32l052::Peripherals::take().unwrap();
->>>>>>> upstream/master
 
     let mut rcc = hw.RCC.constrain();
     let mut flash = hw.FLASH.constrain();

@@ -9,11 +9,10 @@
 //! 
 //! extern crate cortex_m;
 //! extern crate cortex_m_rt;
-//! extern crate stm32l0;
 //! extern crate hal;
 //! extern crate embedded_hal;
 //!
-//! use stm32l0::stm32l0x1;
+//! use hal::stm32l052;
 //! use hal::gpio::GpioExt;
 //! use hal::rcc::RccExt; 
 //! use core::panic::PanicInfo;
@@ -30,7 +29,7 @@
 //! #[entry]
 //! fn main() -> ! {
 //!
-//!    let hw = stm32l0x1::Peripherals::take().unwrap();
+//!    let hw = stm32l052::Peripherals::take().unwrap();
 //!    let cp = cortex_m::Peripherals::take().unwrap();
 //!    let mut rcc = hw.RCC.constrain();
 //!    let mut flash = hw.FLASH.constrain();

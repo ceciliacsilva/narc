@@ -34,7 +34,7 @@
 //!    
 //!    let mut freq = 1;
 //!    
-//!    let hw = stm32l0x1::Peripherals::take().unwrap();
+//!    let hw = stm32l052::Peripherals::take().unwrap();
 //!
 //!        let mut rcc = hw.RCC.constrain();
 //!        let mut flash = hw.FLASH.constrain();

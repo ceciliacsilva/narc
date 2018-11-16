@@ -17,3 +17,4 @@ pub mod delay;
 pub mod adc;
 pub mod serial;
 pub mod dma;
+pub mod qei;

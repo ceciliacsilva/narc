@@ -1,6 +1,6 @@
 use core::u16;
 
-use embedded_hal::{Direction};
+use embedded_hal::{Qei as QeiExt, Direction};
 
 use stm32l052::{TIM2};
 
@@ -53,6 +53,26 @@ macro_rules! hal {
                     tim.cr1.write(|w| w.cen().set_bit());
 
                     Qei { tim, pins }
+                }
+
+                pub fn release(self) -> ($TIMX, PINS) {
+                    (self.tim, self.pins)
+                }
+            }
+
+            impl<PINS> QeiExt for Qei<$TIMX, PINS> {
+                type Count = u16;
+
+                fn count(&self) -> u16 {
+                    self.tim.cnt.read().cnt_l().bits()
+                }
+
+                fn direction(&self) -> Direction {
+                    if self.tim.cr1.read().dir().bit_is_clear() {
+                        Direction::Upcounting
+                    } else {
+                        Direction::Downcounting
+                    }
                 }
             }
         )+        

@@ -68,7 +68,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "hal"
 version = "0.1.5"
 dependencies = [
  "cast 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",

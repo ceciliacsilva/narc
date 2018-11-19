@@ -1,3 +1,5 @@
+//! Serial
+
 use core::marker::{PhantomData, Unsize};
 use core::ptr;
 use core::sync::atomic::{self, Ordering};

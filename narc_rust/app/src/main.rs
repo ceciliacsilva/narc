@@ -9,9 +9,10 @@ extern crate cortex_m;
 // #[macro_use]
 extern crate cortex_m_rt;
 extern crate cortex_m_semihosting;
-extern crate stm32l0;
 extern crate hal;
 extern crate embedded_hal;
+
+use hal::stm32l052;
 
 mod aux;
 // mod peripherals;

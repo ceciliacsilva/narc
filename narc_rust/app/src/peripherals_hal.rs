@@ -1,4 +1,4 @@
-use stm32l0::stm32l0x1;
+use hal::stm32l052;
 
 use hal::{rcc::RccExt, gpio::GpioExt, pwm::PwmExt};
 use hal::{flash::FlashExt};
@@ -9,7 +9,7 @@ use embedded_hal::digital::InputPin;
 use embedded_hal::{PwmPin};
 
 pub fn gpio_test() {
-    let hw = stm32l0x1::Peripherals::take().unwrap();
+    let hw = stm32l052::Peripherals::take().unwrap();
 
     let mut rcc = hw.RCC.constrain();
     let mut flash = hw.FLASH.constrain();

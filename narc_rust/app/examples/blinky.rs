@@ -26,47 +26,40 @@ use cortex_m_rt::entry;
 
 #[entry]
 fn main() -> ! {
-    blinky();
-
-    loop{}
-}
-
-fn blinky() {
+    
+    let freq = 1;
+    
     let hw = stm32l052::Peripherals::take().unwrap();
 
-    let mut rcc = hw.RCC.constrain();
-    let mut flash = hw.FLASH.constrain();
+        let mut rcc = hw.RCC.constrain();
+        let mut flash = hw.FLASH.constrain();
 
-    let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
-    let clocks = rcc.cfgr.freeze(&mut flash.acr);
+        let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
+        let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
-    let led = gpioa.pa5.into_alternate(&mut gpioa.moder).af5(&mut gpioa.afrl);
+        let led = gpioa.pa5.into_alternate(&mut gpioa.moder).af5(&mut gpioa.afrl);
+        let button = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
 
-    let mut pwm = hw.TIM2
+
+        let mut pwm = hw.TIM2
                     .pwm(
                         led,
-                        1.hz(),
+                        3.hz(),
                         clocks,
                         &mut rcc.apb1,
                     );
 
-    let max = pwm.get_max_duty();
-    pwm.enable();
-    pwm.set_duty(max / 2);
-
-    // let mut led = gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
-    // let bot = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
-
-    // loop{
-    //     if bot.is_high(){
-    //         led.set_high();
-    //     } else {
-    //         led.set_low();
-    //     }
-    // }
+        let max = pwm.get_max_duty();
+        pwm.enable();
 
     loop{
-
+        
+        if button.is_low(){
+                pwm.set_duty(max / 2);
+             }
+        else{
+            pwm.set_duty(max / 1);
+        }
     }
 }
 

@@ -1,3 +1,5 @@
+//! HAL for microcontroller STM32l052
+
 #![no_std]
 #![feature(unsize)]
 #![feature(never_type)]

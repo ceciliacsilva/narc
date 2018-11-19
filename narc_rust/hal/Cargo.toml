@@ -2,6 +2,8 @@
 name = "hal"
 version = "0.1.5"
 authors = ["Cecília Carneiro <cecilia.carneiroesilva@gmail.com>"]
+description = "..."
+license = "MIT"
 
 [dependencies]
 cortex-m = { git = "https://github.com/ceciliacsilva/cortex-m", version = "0.5.7" }

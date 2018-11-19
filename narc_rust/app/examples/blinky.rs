@@ -27,7 +27,7 @@ use cortex_m_rt::entry;
 #[entry]
 fn main() -> ! {
     
-    let mut freq = 1;
+    let freq = 1;
     
     let hw = stm32l052::Peripherals::take().unwrap();
 
@@ -38,7 +38,7 @@ fn main() -> ! {
         let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
         let led = gpioa.pa5.into_alternate(&mut gpioa.moder).af5(&mut gpioa.afrl);
-        let mut button = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
+        let button = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
 
 
         let mut pwm = hw.TIM2
@@ -62,32 +62,6 @@ fn main() -> ! {
         }
     }
 }
-
-/*fn blinky() {
-    let hw = stm32l052::Peripherals::take().unwrap();
-
-    let mut rcc = hw.RCC.constrain();
-    let mut flash = hw.FLASH.constrain();
-
-    let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
-    let clocks = rcc.cfgr.freeze(&mut flash.acr);
-
-    let led = gpioa.pa5.into_alternate(&mut gpioa.moder).af5(&mut gpioa.afrl);
-    let mut button = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
-
-
-    let mut pwm = hw.TIM2
-                    .pwm(
-                        led,
-                        2.hz(),
-                        clocks,
-                        &mut rcc.apb1,
-                    );
-
-    let max = pwm.get_max_duty();
-    pwm.enable();
-    pwm.set_duty(max / 5);
-}*/
 
 #[allow(deprecated)]
 #[panic_implementation]

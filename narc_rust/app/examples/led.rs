@@ -29,11 +29,11 @@ fn main() -> ! {
     
     let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
     let mut led = gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
-    let mut botao = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
+    let button = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
 
 
     loop{
-        if !botao.is_low(){
+        if !button.is_low(){
             led.set_high();
          }
         else {

@@ -14,7 +14,7 @@
 //! extern crate cortex_m_rt;
 //! extern crate hal;
 //! extern crate embedded_hal;
-//!  
+//!
 //! use hal::stm32l052;
 //! use hal::gpio::GpioExt;
 //! use hal::rcc::RccExt; 
@@ -29,30 +29,30 @@
 //! #[entry]
 //! fn main() -> ! {
 //!
-//!    let hw = stm32l052::Peripherals::take().unwrap();
-//!    let cp = cortex_m::Peripherals::take().unwrap();
-//!    let mut rcc = hw.RCC.constrain();
-//!    
-//!    let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
-//!    let mut led = gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
-//!    let mut botao = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
-//!
-//!    loop{
-//!        if !botao.is_low(){
-//!            led.set_high();
+//!     let hw = stm32l052::Peripherals::take().unwrap();
+//!     let cp = cortex_m::Peripherals::take().unwrap();
+//!     let mut rcc = hw.RCC.constrain();
+//!     
+//!     let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
+//!     let mut led = gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
+//!     let button = gpioa.pa4.into_input(&mut gpioa.moder).pull_up(&mut gpioa.pupdr);
+//! 
+//!     loop{
+//!         if !button.is_low(){
+//!             led.set_high();
+//!          }
+//!         else {
+//!            led.set_low();
 //!         }
-//!        else {
-//!           led.set_low();
-//!        }
-//!    }
+//!     }
 //! }
-//!
+//! 
 //! #[allow(deprecated)]
 //! #[panic_implementation]
 //! fn panic(_info: &PanicInfo) -> ! {
-//!    bkpt();
+//!     bkpt();
 //!
-//!    loop {
+//!     loop {
 //!        atomic::compiler_fence(Ordering::SeqCst)
 //!    }
 //! }

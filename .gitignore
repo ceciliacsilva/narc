@@ -3,3 +3,5 @@
 *~
 narc_rust/app/target
 narc_rust/hal/target
+narc_rust/app/Cargo.lock
+narc_rust/hal/Cargo.lock

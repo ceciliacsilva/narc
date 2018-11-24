@@ -1,8 +1,8 @@
-use hal::stm32l052;
+use narc_hal::stm32l052;
 
-use hal::{rcc::RccExt, gpio::GpioExt, pwm::PwmExt};
-use hal::{flash::FlashExt};
-use hal::time::U32Ext;
+use narc_hal::{rcc::RccExt, gpio::GpioExt, pwm::PwmExt};
+use narc_hal::{flash::FlashExt};
+use narc_hal::time::U32Ext;
 
 use embedded_hal::digital::OutputPin;
 use embedded_hal::digital::InputPin;

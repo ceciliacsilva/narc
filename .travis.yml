@@ -3,12 +3,12 @@ language: rust
 matrix:
   include:
     - env: TARGET=thumbv6m-none-eabi
-      rust: nightly
+      rust: nightly-2018-11-21-x86_64-unknown-linux-gnu
 
 install:
   - rustup target add $TARGET
 
 script:
-  - cd narc_rust/hal && cargo check
-  - cd ../app && cargo check
+  - cd narc_rust/hal && cargo build
+  - cd ../app && cargo build && cargo build --example fsm
 

@@ -47,8 +47,8 @@ macro_rules! hal {
                                             .cc2e().set_bit()
                                             .cc2p().clear_bit());
 
-                    // Encoder mode 2
-                    tim.smcr.modify(|_, w| unsafe { w.sms().bits(0b010) });
+                    // Encoder mode 3
+                    tim.smcr.modify(|_, w| unsafe { w.sms().bits(0b011) });
                     tim.arr.modify(|_, w| unsafe { w.arr_l().bits(u16::MAX) });
                     tim.cr1.write(|w| w.cen().set_bit());
 
@@ -73,6 +73,12 @@ macro_rules! hal {
                     } else {
                         Direction::Downcounting
                     }
+                }
+            }
+
+            impl<PINS> Qei<$TIMX, PINS> {
+                fn reset(&self) {
+                    self.tim.cnt.write(|w| unsafe{ w.cnt_l().bits(0) });
                 }
             }
         )+        

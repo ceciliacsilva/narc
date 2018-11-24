@@ -1,10 +1,9 @@
-#![feature(panic_implementation)]
 #![no_std]
 #![no_main]
 
 extern crate cortex_m;
 extern crate cortex_m_rt;
-extern crate hal;
+extern crate narc_hal;
 extern crate embedded_hal;
 extern crate cortex_m_semihosting as sh;
 
@@ -12,15 +11,15 @@ use core::panic::PanicInfo;
 use core::sync::atomic::{self, Ordering};
 use cortex_m::asm::bkpt;
 
-use hal::stm32l052;
-use hal::rcc::RccExt;
-use hal::gpio::GpioExt;
-use hal::pwm::PwmExt;
-use hal::flash::FlashExt;
-use hal::time::U32Ext;
-use hal::delay::Delay;
+use narc_hal::stm32l052;
+use narc_hal::rcc::RccExt;
+use narc_hal::gpio::GpioExt;
+use narc_hal::pwm::PwmExt;
+use narc_hal::flash::FlashExt;
+use narc_hal::time::U32Ext;
+use narc_hal::delay::Delay;
 
-use hal::adc::{adc_config, adc_read};
+use narc_hal::adc::{adc_config, adc_read};
 
 use embedded_hal::PwmPin;
 use embedded_hal::prelude::*;
@@ -88,8 +87,7 @@ fn atuador(fsm: &FiniteMachine, t_current: u32) -> u32{
     }
 }
 
-#[allow(deprecated)]
-#[panic_implementation]
+#[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     bkpt();
 

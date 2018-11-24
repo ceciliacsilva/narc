@@ -1,5 +1,4 @@
 // #![deny(unsafe_code)]
-#![feature(panic_implementation)]
 #![no_std]
 #![no_main]
 
@@ -9,10 +8,10 @@ extern crate cortex_m;
 // #[macro_use]
 extern crate cortex_m_rt;
 extern crate cortex_m_semihosting;
-extern crate hal;
+extern crate narc_hal;
 extern crate embedded_hal;
 
-use hal::stm32l052;
+use narc_hal::stm32l052;
 
 mod aux;
 // mod peripherals;

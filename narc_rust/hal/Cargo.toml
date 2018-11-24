@@ -1,8 +1,8 @@
 [package]
-name = "hal"
+name = "narc-hal"
 version = "0.1.5"
 authors = ["Cecília Carneiro <cecilia.carneiroesilva@gmail.com>"]
-description = "..."
+description = "HAL STM32L0"
 license = "MIT"
 
 [dependencies]

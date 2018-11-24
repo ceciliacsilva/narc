@@ -9,5 +9,6 @@ install:
   - rustup target add $TARGET
 
 script:
-  - cd narc_rust/app && cargo build
-  - cd narc_rust/hal && cargo build
+  - cd .. && cd hal && cargo build
+  - cd narc_rust/app && cargo build && cargo build --example fsm
+

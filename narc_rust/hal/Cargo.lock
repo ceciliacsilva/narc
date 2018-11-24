@@ -83,7 +83,7 @@ dependencies = [
  "embedded-hal 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "nb 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "panic-semihosting 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "stm32l052 0.1.1 (git+https://github.com/ceciliacsilva/stm32l052)",
+ "stm32l052 0.1.2 (git+https://github.com/ceciliacsilva/stm32l052)",
 ]
 
 [[package]]
@@ -165,11 +165,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "stm32l052"
-version = "0.1.1"
-source = "git+https://github.com/ceciliacsilva/stm32l052#c4b18be4cf890ca4499a8bb4e04d9ab0490e1aac"
+version = "0.1.2"
+source = "git+https://github.com/ceciliacsilva/stm32l052#76b7ea141267b44a7c8231f568f755e69ba7dafe"
 dependencies = [
  "bare-metal 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "cortex-m 0.5.7 (git+https://github.com/ceciliacsilva/cortex-m)",
+ "cortex-m 0.5.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "cortex-m-rt 0.6.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "vcell 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -228,7 +228,7 @@ dependencies = [
 "checksum rustc_version 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "138e3e0acb6c9fb258b19b67cb8abd63c00679d2851805ea151465464fe9030a"
 "checksum semver 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)" = "1d7eb9ef2c18661902cc47e535f9bc51b78acd254da71d375c2f6720d9a40403"
 "checksum semver-parser 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "388a1df253eca08550bef6c72392cfe7c30914bf41df5269b68cbd6ff8f570a3"
-"checksum stm32l052 0.1.1 (git+https://github.com/ceciliacsilva/stm32l052)" = "<none>"
+"checksum stm32l052 0.1.2 (git+https://github.com/ceciliacsilva/stm32l052)" = "<none>"
 "checksum syn 0.15.21 (registry+https://github.com/rust-lang/crates.io-index)" = "816b7af21405b011a23554ea2dc3f6576dc86ca557047c34098c1d741f10f823"
 "checksum unicode-xid 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "fc72304796d0818e357ead4e000d19c9c174ab23dc11093ac919054d20a6a7fc"
 "checksum vcell 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "45c297f0afb6928cd08ab1ff9d95e99392595ea25ae1b5ecf822ff8764e57a0d"

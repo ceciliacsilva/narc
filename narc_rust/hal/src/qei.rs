@@ -74,9 +74,11 @@ macro_rules! hal {
                         Direction::Downcounting
                     }
                 }
+            }
 
+            impl<PINS> Qei<$TIMX, PINS> {
                 fn reset(&self) {
-                    self.tim.cnt.write(|w| w.cnt_l().bits(0));
+                    self.tim.cnt.write(|w| unsafe{ w.cnt_l().bits(0) });
                 }
             }
         )+        

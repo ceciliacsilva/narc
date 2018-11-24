@@ -9,9 +9,7 @@ use cortex_m_rt::{exception};
 
 // use core::fmt::Write;
 
-
-#[allow(deprecated)]
-#[panic_implementation]
+#[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     // let itm = unsafe { &mut *ITM::ptr() };
 

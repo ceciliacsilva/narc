@@ -1,30 +1,32 @@
-use stm32l0::stm32l0x1;
+// Old version, don't use.
 
-pub fn gpio_test() {
-    let mut peripherals = stm32l0x1::Peripherals::take().unwrap();
+// use stm32l0::stm32l0x1;
 
-    let rcc = &peripherals.RCC;
+// pub fn gpio_test() {
+//     let mut peripherals = stm32l0x1::Peripherals::take().unwrap();
 
-    rcc.iopenr.modify(|_, w| w.iopaen().set_bit());
+//     let rcc = &peripherals.RCC;
 
-    let gpioa = &peripherals.GPIOA;
+//     rcc.iopenr.modify(|_, w| w.iopaen().set_bit());
 
-    gpioa.moder.modify(|_, w| unsafe{ w.mode4().bits(0) } );
-    gpioa.pupdr.modify(|_, w| unsafe { w.pupd4().bits(1) });
+//     let gpioa = &peripherals.GPIOA;
 
-    gpioa.moder.modify(|_, w| unsafe{ w.mode5().bits(1) });
+//     gpioa.moder.modify(|_, w| unsafe{ w.mode4().bits(0) } );
+//     gpioa.pupdr.modify(|_, w| unsafe { w.pupd4().bits(1) });
 
-    gpioa.odr.modify(|_, w| w.od5().set_bit());
+//     gpioa.moder.modify(|_, w| unsafe{ w.mode5().bits(1) });
 
-    loop{
-        let button = gpioa.idr.read().id4();
+//     gpioa.odr.modify(|_, w| w.od5().set_bit());
 
-        if !button.bit_is_set() {
-            gpioa.odr.modify(|_, w| w.od5().set_bit());
-        } else {
-            gpioa.odr.modify(|_, w| w.od5().clear_bit());
-        }    
+//     loop{
+//         let button = gpioa.idr.read().id4();
+
+//         if !button.bit_is_set() {
+//             gpioa.odr.modify(|_, w| w.od5().set_bit());
+//         } else {
+//             gpioa.odr.modify(|_, w| w.od5().clear_bit());
+//         }    
     
-    }
-}
+//     }
+// }
 

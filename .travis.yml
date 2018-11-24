@@ -10,11 +10,5 @@ install:
 
 script:
   script:
-  - cd narc_rust/app
-  - cargo build --example fsm
-  - cargo build --example blink
-  - cargo build --example serial
-  - cargo build --example led
-  - cargo build --example systick
-  - cargo build --example delay
+  - cd narc_rust/app && cargo build --example fsm && cargo build --example blink && cargo build --example serial && cargo build --example led && cargo build --example systick && cargo build --example delay
 

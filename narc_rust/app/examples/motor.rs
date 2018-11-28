@@ -33,7 +33,7 @@ fn main() -> ! {
         let mut flash = hw.FLASH.constrain();
 
         let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
-        //let mut gpiob = hw.GPIOB.split(&mut rcc.iop);
+        let mut gpiob = hw.GPIOB.split(&mut rcc.iop);
         //let mut gpioc = hw.GPIOC.split(&mut rcc.iop);
 
         let clocks = rcc.cfgr.freeze(&mut flash.acr);
@@ -41,12 +41,14 @@ fn main() -> ! {
         let mot2 = gpioa.pa0.into_alternate(&mut gpioa.moder).af2(&mut gpioa.afrl);
         let mut led = gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
         //let mot1 = gpioa.pa1.into_alternate(&mut gpioa.moder).af2(&mut gpioa.afrl);
-        //let mot2_in2 = gpiob.pb6.into_input(&mut gpiob.moder).pull_down(&mut gpiob.pupdr);
-        //let mot2_in1 = gpiob.pb7.into_input(&mut gpiob.moder).pull_down(&mut gpiob.pupdr);
+        let mut mot2_in2 = gpiob.pb6.into_output(&mut gpiob.moder).push_pull(&mut gpiob.otyper);
+        let mut mot2_in1 = gpiob.pb7.into_output(&mut gpiob.moder).push_pull(&mut gpiob.otyper);
         //let mot1_in1 = gpioc.pc14.into_input(&mut gpioc.moder).pull_down(&mut gpioc.pupdr);
         //let mot1_in2 = gpioc.pc15.into_input(&mut gpioc.moder).pull_down(&mut gpioc.pupdr);
         
-    
+        mot2_in1.set_high();
+        mot2_in2.set_low();
+
         let mut pwm = hw.TIM2
                     .pwm(
                         mot2,

@@ -121,14 +121,30 @@ impl Pins<TIM2> for (PA15<AF5>) {
     type Channels = Pwm<TIM2, C1>;
 }
 
-impl Pins<TIM2> for
+/*impl Pins<TIM2> for
 (PA0<AF2>, PA1<AF2>, PA2<AF2>, PA3<AF2>){
     const C1: bool= true;
     const C2: bool= true;
     const C3: bool= true;
     const C4: bool= true;
     type Channels = (Pwm<TIM2, C1>, Pwm<TIM2, C2>, Pwm<TIM2, C3>, Pwm<TIM2, C4>);
+}*/
+
+impl Pins<TIM2> for (PA0<AF2>){
+    const C1: bool= true;
+    const C2: bool= true;
+    const C3: bool= true;
+    const C4: bool= true;
+    type Channels = (Pwm<TIM2, C1>);
 }
+
+/*impl Pins<TIM2> for (PA1<AF2>){
+    const C1: bool= true;
+    const C2: bool= true;
+    const C3: bool= true;
+    const C4: bool= true;
+    type Channels = (Pwm<TIM2, C1>, Pwm<TIM2, C2>, Pwm<TIM2, C3>, Pwm<TIM2, C4>);
+}*/
 
 pub trait PwmExt: Sized {
     fn pwm<PINS, T>(

@@ -262,6 +262,19 @@ macro_rules! gpio {
                 }
 
                 impl $PXi<Alternate> {
+
+                    /// Configures the pin 2 to serve as alternative function
+                    pub fn af2(self, afr: &mut $CR) -> $PXi<AF2> {
+                        let af = 2;
+                        let offset = 4 * ($i % 8);
+
+                        afr.afr().modify(|r, w| unsafe {
+                            w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
+                        });
+
+                        $PXi { _mode: PhantomData }
+                    }
+
                     /// Configures the pin 4 to serve as alternative function
                      pub fn af4(self, afr: &mut $CR) -> $PXi<AF4> {
                         let af = 4;
@@ -410,3 +423,18 @@ gpio!(GPIOA, gpioa, gpioa, iopaen, ioparst, PAx, [
     PA14: (pa14, 14, Analog, AFRH),
     PA15: (pa15, 15, Analog, AFRH),
 ]);
+
+gpio!(GPIOB, gpiob, gpiob, iopaen, ioparst, PAx, [
+    PB0: (pb0, 0, Analog, AFRL),
+    PB1: (pb1, 1, Analog, AFRL),
+    PB3: (pb3, 3, Analog, AFRL),
+    PB4: (pb4, 4, Analog, AFRL),
+    PB5: (pb5, 5, Analog, AFRL),
+    PB6: (pb6, 6, Analog, AFRL),
+    PB7: (pb7, 7, Analog, AFRL),
+]);
+
+/*gpio!(GPIOC, gpioc, gpioc, iopaen, ioparst, PAx, [
+    PC14: (pc14, 14, Analog, AFRH),
+    PC15: (pc15, 15, Analog, AFRH),
+]);*/

@@ -12,7 +12,6 @@ extern crate cortex_m_semihosting;
 extern crate hal;
 extern crate embedded_hal;
 
-use hal::stm32l052;
 
 mod aux;
 // mod peripherals;

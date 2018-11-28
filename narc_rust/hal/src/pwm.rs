@@ -238,7 +238,7 @@ macro_rules! hal {
                 
                 let arr = u16(ticks / u32(psc + 1)).unwrap();
                 let arr = arr as u32;
-                tim.arr.write(|w| unsafe{w.bits(arr)} );
+                tim.arr.write(|w| unsafe{ w.bits(arr) } );
 
                 unsafe { mem::uninitialized() }
             }

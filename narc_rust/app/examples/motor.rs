@@ -49,27 +49,26 @@ fn main() -> ! {
         mot2_in1.set_high();
         mot2_in2.set_low();
 
-        let mut pwm = hw.TIM2
+        let mut mot2_pwm = hw.TIM2
                     .pwm(
                         mot2,
                         60.hz(),
                         clocks,
                         &mut rcc.apb1,
                     );
-        /*
-        let mut mot1_pwm = hw.TIM2
+        
+        /*let mut mot1_pwm = hw.TIM2
                     .pwm(
                         mot1,
-                        3.hz(),
+                        60.hz(),
                         clocks,
                         &mut rcc.apb1,
-                    );
-        */
+                    );*/
 
         led.set_high();
 
-        let max = pwm.get_max_duty();
-        pwm.enable(); 
+        let max = mot2_pwm.get_max_duty();
+        mot2_pwm.enable(); 
 
     loop{
         

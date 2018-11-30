@@ -424,7 +424,7 @@ gpio!(GPIOA, gpioa, gpioa, iopaen, ioparst, PAx, [
     PA15: (pa15, 15, Analog, AFRH),
 ]);
 
-gpio!(GPIOB, gpiob, gpiob, iopaen, ioparst, PAx, [
+gpio!(GPIOB, gpiob, gpiob, iopben, iopbrst, PAx, [
     PB0: (pb0, 0, Analog, AFRL),
     PB1: (pb1, 1, Analog, AFRL),
     PB3: (pb3, 3, Analog, AFRL),
@@ -434,7 +434,7 @@ gpio!(GPIOB, gpiob, gpiob, iopaen, ioparst, PAx, [
     PB7: (pb7, 7, Analog, AFRL),
 ]);
 
-/*gpio!(GPIOC, gpioc, gpioc, iopaen, ioparst, PAx, [
+/*gpio!(GPIOC, gpioc, gpioc, iopcen, iopcrst, PAx, [
     PC14: (pc14, 14, Analog, AFRH),
     PC15: (pc15, 15, Analog, AFRH),
 ]);*/

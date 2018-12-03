@@ -8,33 +8,34 @@ use gpio::gpioa::{PA0, PA1, PA6, PA7};
 use gpio::{Analog};
 use rcc::{APB1, APB2};
 
+pub struct Qei<TIM, PINS> {
+    tim: TIM,
+    pins: PINS
+}
+
 pub trait Pins<Tim> {}
 
 impl Pins<TIM2> for (PA0<Analog>, PA1<Analog>) {}
 
 impl Pins<TIM22> for (PA6<Analog>, PA7<Analog>) {}
 
-pub struct Qei<TIM, PINS> {
-    tim: TIM,
-    pins: PINS,
+pub trait QeiFunc: Sized {
+    type tim;
+    type apb;
+
+    fn qei<PINS>(self, pins: PINS, apb: &mut Self::apb) -> Qei<Self::tim, PINS>
+    where PINS: Pins<Self>;
 }
 
-// impl<PINS> Qei<TIM2, PINS> {
-//     pub fn tim2(tim: TIM2, pins: PINS, apb: &mut APB1) -> Self 
-//     where 
-//         PINS: Pins<TIM2> 
-//     {
-//         Qei::_tim2(tim, pins, apb)
-//     }
-// }
+impl QeiFunc for TIM22{
+    type tim = Self;
+    type apb = APB2;
 
-
-impl<PINS> Qei<TIM22, PINS> {
-    pub fn tim22(tim: TIM22, pins: PINS, apb: &mut APB2) -> Self 
+    fn qei<PINS>(self, pins: PINS, apb: &mut Self::apb) -> Qei<Self::tim, PINS>
     where 
         PINS: Pins<TIM22> 
     {
-        Qei::_tim22(tim, pins, apb)
+        Qei::_tim22(self, pins, apb)
     }
 }
 
@@ -70,38 +71,25 @@ macro_rules! hal {
                 pub fn release(self) -> ($TIMX, PINS) {
                     (self.tim, self.pins)
                 }
+
+                pub fn reset(&self) {
+                    self.tim.cnt.write(|w| unsafe{ w.cnt().bits(0) });
+                }
             }
 
-            // impl<PINS> QeiExt for Qei<$TIMX, PINS> {
-            //     type Count = u16;
+            impl<PINS> QeiExt for Qei<$TIMX, PINS> {
+                type Count = u16;
 
-            //     fn count(&self) -> Self::Count {
-            //         self.tim.cnt.read().cnt().bits()
-            //     }
-
-            //     fn direction(&self) -> Direction {
-            //         if self.tim.cr1.read().dir().bit_is_clear() {
-            //             Direction::Upcounting
-            //         } else {
-            //             Direction::Downcounting
-            //         }
-            //     }
-            // }
-
-            impl<PINS> Qei<$TIMX, PINS> {
-                pub fn count(&self) -> u16 {
+                fn count(&self) -> Self::Count {
                     self.tim.cnt.read().cnt().bits()
                 }
 
-                pub fn direction(&self) -> Direction {
+                fn direction(&self) -> Direction {
                     if self.tim.cr1.read().dir().bit_is_clear() {
                         Direction::Upcounting
                     } else {
                         Direction::Downcounting
                     }
-                }
-                pub fn reset(&self) {
-                    self.tim.cnt.write(|w| unsafe{ w.cnt().bits(0) });
                 }
             }
         )+        

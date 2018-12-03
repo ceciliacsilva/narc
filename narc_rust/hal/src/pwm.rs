@@ -155,7 +155,7 @@ impl PwmExt for TIM2 {
         PINS: Pins<Self>,
         T: Into<Hertz>,
     {
-        tim2(self, _pins, freq.into(), clocks, apb)
+        _tim2(self, _pins, freq.into(), clocks, apb)
     }
 }
 
@@ -335,5 +335,5 @@ macro_rules! hal {
 }
 
 hal! {
-    TIM2: (tim2, tim2en, tim2rst),
+    TIM2: (_tim2, tim2en, tim2rst),
 }

@@ -17,15 +17,11 @@ use core::panic::PanicInfo;
  use narc_hal::flash::FlashExt;
  use narc_hal::time::U32Ext;
  use narc_hal::qei::*;
- 
- use narc_hal::stm32l052::{TIM22};
- use narc_hal::gpio::{gpioa::PA6, gpioa::PA7};
 
  use embedded_hal::digital::OutputPin;
  use embedded_hal::digital::InputPin;
- use embedded_hal::{Direction/* , Qei */};
-
-
+ use embedded_hal::{Direction, Qei};
+ 
  use embedded_hal::PwmPin;
  use cortex_m_rt::entry;
  
@@ -52,10 +48,10 @@ use core::panic::PanicInfo;
     let outa = gpioa.pa6.into_analog(&mut gpioa.moder, &mut gpioa.pupdr);
     let outb = gpioa.pa7.into_analog(&mut gpioa.moder, &mut gpioa.pupdr);
     
-    // let qei = hw.TIM22.qei((outa, outb));
-    let qei = Qei::tim22(hw.TIM22,
-                         (outa, outb), 
-                         &mut rcc.apb2);
+    let qei = hw.TIM22
+            .qei(
+                (outa, outb),
+                &mut rcc.apb2);
         
     mot2_in1.set_low();
     mot2_in2.set_high();

@@ -122,12 +122,12 @@ impl Pins<TIM2> for (PA15<AF5>) {
 }
 
 impl Pins<TIM2> for
-(PA0<AF2>, PA1<AF2>, PA2<AF2>, PA3<AF2>){
+(PA0<AF2>/* , PA1<AF2>, PA2<AF2>, PA3<AF2> */){
     const C1: bool= true;
-    const C2: bool= true;
-    const C3: bool= true;
-    const C4: bool= true;
-    type Channels = (Pwm<TIM2, C1>, Pwm<TIM2, C2>, Pwm<TIM2, C3>, Pwm<TIM2, C4>);
+    const C2: bool= false;
+    const C3: bool= false;
+    const C4: bool= false;
+    type Channels = (Pwm<TIM2, C1>/* , Pwm<TIM2, C2>, Pwm<TIM2, C3>, Pwm<TIM2, C4> */);
 }
 
 pub trait PwmExt: Sized {
@@ -155,7 +155,7 @@ impl PwmExt for TIM2 {
         PINS: Pins<Self>,
         T: Into<Hertz>,
     {
-        tim2(self, _pins, freq.into(), clocks, apb)
+        _tim2(self, _pins, freq.into(), clocks, apb)
     }
 }
 
@@ -335,5 +335,5 @@ macro_rules! hal {
 }
 
 hal! {
-    TIM2: (tim2, tim2en, tim2rst),
+    TIM2: (_tim2, tim2en, tim2rst),
 }

@@ -5,7 +5,7 @@ use embedded_hal::{Qei as QeiExt, Direction};
 use stm32l052::{TIM2, TIM22};
 
 use gpio::gpioa::{PA0, PA1, PA6, PA7};
-use gpio::{Analog};
+use gpio::{AF5};
 use rcc::{APB1, APB2};
 
 pub struct Qei<TIM, PINS> {
@@ -15,9 +15,7 @@ pub struct Qei<TIM, PINS> {
 
 pub trait Pins<Tim> {}
 
-impl Pins<TIM2> for (PA0<Analog>, PA1<Analog>) {}
-
-impl Pins<TIM22> for (PA6<Analog>, PA7<Analog>) {}
+impl Pins<TIM22> for (PA6<AF5>, PA7<AF5>) {}
 
 pub trait QeiFunc: Sized {
     type tim;
@@ -57,11 +55,14 @@ macro_rules! hal {
                     tim.ccer.modify(|_, w| w
                                             .cc1e().set_bit()
                                             .cc1p().clear_bit()
+                                            .cc1np().clear_bit()
                                             .cc2e().set_bit()
-                                            .cc2p().clear_bit());
+                                            .cc2p().clear_bit()
+                                            .cc2np().clear_bit());
 
                     // Encoder mode 3
                     tim.smcr.modify(|_, w| unsafe { w.sms().bits(0b011) });
+                    tim.psc.modify(|_, w| unsafe { w.psc().bits(0) });
                     tim.arr.modify(|_, w| unsafe { w.arr().bits(u16::MAX) });
                     tim.cr1.write(|w| w.cen().set_bit());
 

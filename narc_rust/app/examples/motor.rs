@@ -45,8 +45,8 @@ use core::panic::PanicInfo;
     let mut mot2_in1 = gpiob.pb7.into_output(&mut gpiob.moder).push_pull(&mut gpiob.otyper);
     //let mot1_in1 = gpioc.pc14.into_input(&mut gpioc.moder).pull_down(&mut gpioc.pupdr);
     //let mot1_in2 = gpioc.pc15.into_input(&mut gpioc.moder).pull_down(&mut gpioc.pupdr)w;
-    let outa = gpioa.pa6.into_analog(&mut gpioa.moder, &mut gpioa.pupdr);
-    let outb = gpioa.pa7.into_analog(&mut gpioa.moder, &mut gpioa.pupdr);
+    let outa = gpioa.pa6.into_alternate(&mut gpioa.moder).af5(&mut gpioa.afrl);
+    let outb = gpioa.pa7.into_alternate(&mut gpioa.moder).af5(&mut gpioa.afrl);
     
     let qei = hw.TIM22
             .qei(

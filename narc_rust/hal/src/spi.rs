@@ -89,8 +89,6 @@ macro_rules! hal {
                             .clear_bit()
                             .ssm()
                             .set_bit()
-                            .ssi()
-                            .set_bit()
                             .rxonly()
                             .clear_bit()
                             .dff()

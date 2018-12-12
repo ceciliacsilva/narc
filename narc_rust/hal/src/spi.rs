@@ -57,7 +57,7 @@ macro_rules! hal {
                     clocks: Clocks,
                     apb: &mut $APB,
                 ) -> Self {
-                    apb.enr().modify(|_, w| w.$spiXen().enabled());
+                    apb.enr().modify(|_, w| w.$spiXen().set_bit());
                     apb.rstr().modify(|_, w| w.$spiXrst().set_bit());
                     apb.rstr().modify(|_, w| w.$spiXrst().clear_bit());
 
@@ -76,7 +76,7 @@ macro_rules! hal {
                         _ => 0b111,
                     };
 
-                    spi.cr1.write(|w| {
+                    spi.cr1.write(|w| unsafe {
                         w.cpha()
                             .bit(mode.phase == Phase::CaptureOnSecondTransition)
                             .cpol()
@@ -107,7 +107,7 @@ macro_rules! hal {
                 }
             }
 
-            impl<PINS> hal::spi::FullDuplex<u8> for Spi<$SPIX, PINS> {
+            impl<PINS> embedded_hal::spi::FullDuplex<u8> for Spi<$SPIX, PINS> {
                 type Error = Error;
 
                 fn read(&mut self) -> nb::Result<u8, Error> {

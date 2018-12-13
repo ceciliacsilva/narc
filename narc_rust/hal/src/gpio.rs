@@ -432,3 +432,7 @@ gpio!(GPIOB, gpiob, gpiob, iopben, iopbrst, PBx, [
     PB6: (pb6, 6, Analog, AFRL),
     PB7: (pb7, 7, Analog, AFRL),
 ]);
+
+gpio!(GPIOC, gpioc, gpiob, iopcen, iopcrst, PCx, [
+    PC0: (pc0, 0, Analog, AFRL),
+]);

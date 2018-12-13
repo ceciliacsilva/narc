@@ -20,3 +20,4 @@ pub mod adc;
 pub mod serial;
 pub mod dma;
 pub mod qei;
+pub mod spi;

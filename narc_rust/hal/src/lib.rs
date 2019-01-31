@@ -9,6 +9,7 @@ extern crate embedded_hal;
 extern crate cortex_m;
 extern crate cast;
 extern crate nb;
+extern crate void;
 
 pub mod flash;
 pub mod rcc;
@@ -21,3 +22,4 @@ pub mod serial;
 pub mod dma;
 pub mod qei;
 pub mod spi;
+pub mod timer;

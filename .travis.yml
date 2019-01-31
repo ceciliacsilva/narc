@@ -3,7 +3,7 @@ language: rust
 matrix:
   include:
     - env: TARGET=thumbv6m-none-eabi
-      rust: nightly-2018-11-21-x86_64-unknown-linux-gnu
+      rust: nightly-2019-01-09-x86_64-unknown-linux-gnu
 
 install:
   - rustup target add $TARGET

@@ -49,7 +49,7 @@ macro_rules! hal {
 
                     let arr = u16(ticks / u32(psc + 1)).unwrap();
 
-                    self.tim.arr.write(|w| unsafe { w.arr().bits(psc) });
+                    self.tim.arr.write(|w| unsafe { w.arr().bits(arr) });
 
                     self.tim.cr1.modify(|_, w| w.cen().set_bit());
                 }

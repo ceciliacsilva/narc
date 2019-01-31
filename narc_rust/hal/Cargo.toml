@@ -1,6 +1,6 @@
 [package]
 name = "narc-hal"
-version = "0.1.7"
+version = "0.1.8"
 authors = ["Cecília Carneiro <cecilia.carneiroesilva@gmail.com>"]
 description = "HAL STM32L0"
 license = "MIT"
@@ -10,6 +10,7 @@ cortex-m = "0.5.8"
 cortex-m-rt = {version = "0.6.5"}
 panic-semihosting = "0.4.0"
 nb = "0.1.1"
+void = "1"
 
 [dependencies.stm32l052]
 version = "0.1.3"

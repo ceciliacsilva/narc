@@ -65,7 +65,7 @@ dependencies = [
 
 [[package]]
 name = "narc-hal"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "cast 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "cortex-m 0.5.8 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -74,6 +74,7 @@ dependencies = [
  "nb 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "panic-semihosting 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "stm32l052 0.1.3 (git+https://github.com/ceciliacsilva/stm32l052)",
+ "void 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

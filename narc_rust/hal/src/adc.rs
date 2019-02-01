@@ -1,60 +1,57 @@
 use stm32l052::ADC;
 use rcc::APB2;
+use gpio::{Analog, gpioa::PA2};
+pub trait Pin<Adc> {}
 
-use cortex_m::asm::bkpt;
+impl Pin<ADC> for PA2<Analog> {}
 
-pub fn adc_read(adc: &ADC) -> u32 {
-    adc.dr.read().bits()
+pub trait AdcExt:Sized {
+    fn read(&self) -> u32;
+    fn config<PIN>(&mut self, _pin: PIN, apb2: &mut APB2)
+        where PIN: Pin<Self>;
 }
 
-pub fn adc_config(apb2: &mut APB2, adc: &mut ADC){
-    apb2.enr().modify(|_, w| w.adcen().set_bit());
-    apb2.rstr().modify(|_, w| w.adcrst().set_bit());
-    apb2.rstr().modify(|_, w| w.adcrst().clear_bit());    
-
-    //div1
-    adc.cfgr2.modify(|_, w| unsafe{ w.ckmode().bits(0b11) });
-
-    if adc.cr.read().aden().bit() {
-        adc.cr.modify(|_, w| w.aden().clear_bit());
+impl AdcExt for ADC {
+    fn read(&self) -> u32 {
+        self.dr.read().bits()
     }
 
-    adc.cr.modify(|_, w| w.adcal().set_bit());
+    fn config<PIN>(&mut self, _pin: PIN, apb2: &mut APB2)
+    where
+        PIN: Pin<Self>
+    {
+        apb2.enr().modify(|_, w| w.adcen().set_bit());
+        apb2.rstr().modify(|_, w| w.adcrst().set_bit());
+        apb2.rstr().modify(|_, w| w.adcrst().clear_bit());
 
-    while adc.isr.read().eocal().bit() == false {}
+        //div1
+        self.cfgr2.modify(|_, w| unsafe{ w.ckmode().bits(0b11) });
 
-    // adc.isr.modify(|_, w| w.eocal().set_bit());
-    adc.isr.modify(|_, w| w.adrdy().set_bit());
+        if self.cr.read().aden().bit() {
+            self.cr.modify(|_, w| w.aden().clear_bit());
+        }
 
-    adc.cr.modify(|_, w| w.aden().set_bit());
+        self.cr.modify(|_, w| w.adcal().set_bit());
 
-    adc.cfgr1.modify(|_, w| w.cont().set_bit());
+        while self.isr.read().eocal().bit() == false {}
 
-    adc.smpr.modify(|_, w| unsafe{ w.smpr().bits(0b000) });
-    adc.chselr.modify(|_, w| w.chsel2().set_bit());
-    adc.cfgr1.modify(|_, w| unsafe{ w.exten().bits(0b00) });
+        // self.isr.modify(|_, w| w.eocal().set_bit());
+        self.isr.modify(|_, w| w.adrdy().set_bit());
 
-    // adc.ccr.modify(|_, w| w.tsen().set_bit());
-    adc.cr.modify(|_, w| w.adstart().set_bit());
+        self.cr.modify(|_, w| w.aden().set_bit());
 
-    // while adc.isr.read().eoc().bit() == false {}
+        self.cfgr1.modify(|_, w| w.cont().set_bit());
 
-    //     ADC1->CR2   |= ADC_CR2_ADON;
-    //   ADC1->CR2   |= ADC_CR2_RSTCAL;
-    //   ADC1->CR2   |= ADC_CR2_CAL;
+        self.smpr.modify(|_, w| unsafe{ w.smpr().bits(0b000) });
+        self.chselr.modify(|_, w| w.chsel2().set_bit());
+        self.cfgr1.modify(|_, w| unsafe{ w.exten().bits(0b00) });
 
-    //   ADC1->CR2   |= ADC_CR2_EXTTRIG;
-    //   ADC1->CR2   |= ADC_CR2_EXTSEL_0 | ADC_CR2_EXTSEL_1 | ADC_CR2_EXTSEL_2;
+        // self.ccr.modify(|_, w| w.tsen().set_bit());
+        self.cr.modify(|_, w| w.adstart().set_bit());
 
-    //   ADC1->CR2   |= ADC_CR2_CONT;
-
-    //   //ADC1->CR2   |= ADC_CR2_TSVREFE; //sensor-temp
-    //   //ADC1->SQR3  |= ADC_SQR3_SQ1_4; //IN16
-
-    //   //ADC1->SQR3  |= ADC_SQR3_SQ1_0 | ADC_SQR3_SQ1_2; //PA5-IN5
-
-    //   ADC1->SQR3  |= ADC_SQR3_SQ1_3 | ADC_SQR3_SQ1_1; //PC0-IN10
-    
-    //   ADC1->CR2   |= ADC_CR2_SWSTART;
+        // while self.isr.read().eoc().bit() == false {}
+    }
 }
+
+
 

@@ -2,11 +2,11 @@ use core::u16;
 
 use embedded_hal::{Qei as QeiExt, Direction};
 
-use stm32l052::{TIM2, TIM22};
+use stm32l052::{TIM22};
 
-use gpio::gpioa::{PA0, PA1, PA6, PA7};
+use gpio::gpioa::{PA6, PA7};
 use gpio::{AF5};
-use rcc::{APB1, APB2};
+use rcc::{APB2};
 
 pub struct Qei<TIM, PINS> {
     tim: TIM,
@@ -93,7 +93,7 @@ macro_rules! hal {
                     }
                 }
             }
-        )+        
+        )+
     };
 }
 

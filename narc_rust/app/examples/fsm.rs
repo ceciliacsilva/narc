@@ -18,8 +18,7 @@ use narc_hal::pwm::PwmExt;
 use narc_hal::flash::FlashExt;
 use narc_hal::time::U32Ext;
 use narc_hal::delay::Delay;
-
-use narc_hal::adc::{adc_config, adc_read};
+use narc_hal::adc::AdcExt;
 
 use embedded_hal::PwmPin;
 use embedded_hal::prelude::*;
@@ -40,7 +39,7 @@ fn main() -> ! {
     let mut adc = hw.ADC;
     let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
 
-    gpioa.pa2.into_analog(&mut gpioa.moder, &mut gpioa.pupdr);
+    let adc_in = gpioa.pa2.into_analog(&mut gpioa.moder, &mut gpioa.pupdr);
 
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
@@ -58,13 +57,13 @@ fn main() -> ! {
 
     let mut t_current = t_ref;
 
-    adc_config(&mut rcc.apb2, &mut adc);
+    adc.config(adc_in, &mut rcc.apb2);
     fsm_state_change(&mut finite_machine, 0, 0, 0);
 
     loop{
         writeln!(hstdout,"Estado atual: {:?}", finite_machine.state).unwrap();
         
-        let value = adc_read(&adc);
+        let value = adc.read();
         writeln!(hstdout,"ADC: {}", value).unwrap();
 
         let t_amb = atuador(&finite_machine, t_current);

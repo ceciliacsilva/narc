@@ -215,6 +215,7 @@ macro_rules! gpio {
             }
             
             impl AFRH {
+                #[allow(dead_code)]
                 pub(crate) fn afr(&mut self) -> &$gpioy::AFRH {
                     unsafe { &(*$GPIOX::ptr()).afrh }
                 }
@@ -262,7 +263,7 @@ macro_rules! gpio {
                 }
 
                 impl $PXi<Alternate> {
-                    /// Configures the pin 4 to serve as alternative function
+                    /// Configures the pin to serve as alternative function 2
                     pub fn af2(self, afr: &mut $CR) -> $PXi<AF2> {
                         let af = 2;
                         let offset = 4 * ($i % 8);
@@ -274,7 +275,7 @@ macro_rules! gpio {
                         $PXi { _mode: PhantomData }
                     }
 
-                    /// Configures the pin 4 to serve as alternative function
+                    /// Configures the pin to serve as alternative function 4
                      pub fn af4(self, afr: &mut $CR) -> $PXi<AF4> {
                         let af = 4;
                         let offset = 4 * ($i % 8);
@@ -286,7 +287,7 @@ macro_rules! gpio {
                         $PXi { _mode: PhantomData }
                     }
 
-                    /// Configures the pin 5 to serve as alternative function
+                    /// Configures the pin to serve as alternative function 5
                     pub fn af5(self, afr: &mut $CR) -> $PXi<AF5> {
                         let af = 5;
                         let offset = 4 * ($i % 8);
@@ -327,7 +328,6 @@ macro_rules! gpio {
                 impl $PXi<Analog> {
                     // TODO all modes.
                     // TODO change generic MODE to Analog
-                    
                     /// Defines pin as Output
                     pub fn into_output (self, moder: &mut MODER) -> $PXi<OutputDigital> {
                         let offset = 2 * $i;

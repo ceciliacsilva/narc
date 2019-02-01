@@ -92,7 +92,7 @@ use cast::{u16, u32};
 use embedded_hal::{PwmPin};
 use stm32l052::{TIM2};
 
-use gpio::gpioa::{PA0, PA1, PA2, PA3, PA5, PA15};
+use gpio::gpioa::{PA0, PA5, PA15};
 use gpio::{AF2, AF5};
 use rcc::{APB1, Clocks};
 use time::Hertz;

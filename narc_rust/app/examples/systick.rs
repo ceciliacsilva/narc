@@ -12,18 +12,6 @@ use cortex_m::asm::bkpt;
 
 use narc_hal::stm32l052;
 use narc_hal::rcc::RccExt;
-use narc_hal::gpio::GpioExt;
-use narc_hal::pwm::PwmExt;
-use narc_hal::flash::FlashExt;
-use narc_hal::time::U32Ext;
-use narc_hal::delay::Delay;
-
-use narc_hal::adc::{adc_config, adc_read};
-use narc_hal::gpio::{Output, PushPull, gpioa::PA5};
-
-
-use embedded_hal::PwmPin;
-use embedded_hal::prelude::*;
 
 use cortex_m::peripheral::syst::SystClkSource;
 
@@ -36,14 +24,7 @@ fn main() -> ! {
     let hw = stm32l052::Peripherals::take().unwrap();
     let mut cp = cortex_m::Peripherals::take().unwrap();
 
-    let mut rcc = hw.RCC.constrain();
-    let mut flash = hw.FLASH.constrain();
-    let mut adc = hw.ADC;
-    let mut gpioa = hw.GPIOA.split(&mut rcc.iop);
-
-    gpioa.pa5.into_output(&mut gpioa.moder).push_pull(&mut gpioa.otyper);
-
-    let clocks = rcc.cfgr.freeze(&mut flash.acr);
+    let _rcc = hw.RCC.constrain();
 
     cp.SYST.set_clock_source(SystClkSource::Core);
     cp.SYST.set_reload(2_000_000); // 1s
@@ -52,7 +33,6 @@ fn main() -> ! {
     cp.SYST.enable_interrupt();
 
     loop{
-        
     }
 }
 

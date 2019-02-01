@@ -1,6 +1,6 @@
 [package]
 name = "narc_app"
-version = "0.1.1"
+version = "0.1.2"
 description = "NARC Project"
 authors = ["Cecília Carneiro <cecilia.carneiroesilva@gmail.com>"]
 repository = "https://github.com/ceciliacsilva/narc"
@@ -19,7 +19,7 @@ git = "https://github.com/ceciliacsilva/stm32l052"
 features = ["rt"]
 
 [dependencies.narc-hal]
-version = "0.1.6"
+version = "0.2.0"
 path = "../hal"
 
 [dependencies.embedded-hal]

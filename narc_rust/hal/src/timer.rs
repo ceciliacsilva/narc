@@ -19,6 +19,22 @@ pub enum Event {
     TimeOut,
 }
 
+pub trait TimerExt: Sized {
+    type apb;
+
+    fn timer<T>(self, timeout: T, clocks: Clocks, apb: &mut Self::apb) -> Timer<Self> where T: Into<Hertz>;
+}
+
+impl TimerExt for TIM6 {
+    type apb = APB1;
+
+    fn timer<T>(self, timeout: T, clocks: Clocks, apb: &mut Self::apb) -> Timer<Self>
+    where
+        T: Into<Hertz>
+    {
+        Timer::_tim6(self, timeout, clocks, apb)
+    }
+}
 
 macro_rules! hal {
     ($($TIM:ident: ($tim:ident, $timXen:ident, $timXrst:ident), )+) => {
@@ -65,7 +81,7 @@ macro_rules! hal {
             }
 
             impl Timer<$TIM> {
-                pub fn $tim<T>(tim: $TIM, timeout: T, clocks: Clocks, apb1: &mut APB1) -> Self
+                fn $tim<T>(tim: $TIM, timeout: T, clocks: Clocks, apb1: &mut APB1) -> Self
                 where
                     T: Into<Hertz>
                 {
@@ -75,7 +91,7 @@ macro_rules! hal {
 
                     let mut timer = Timer {
                         clocks,
-                        tim,
+                        tim: tim,
                         timeout: Hertz(0),
                     };
 
@@ -110,5 +126,5 @@ macro_rules! hal {
 }
 
 hal! {
-    TIM6: (tim6, tim6en, tim6rst),
+    TIM6: (_tim6, tim6en, tim6rst),
 }

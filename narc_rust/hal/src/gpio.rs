@@ -77,10 +77,12 @@ pub struct InputDigital;
 pub struct Input<MODE> {
     _mode: PhantomData<MODE>,
 }
-/// Input Mode types 
+/// Input Mode types
 pub struct PullDown;
 /// Input Mode types
 pub struct PullUp;
+/// Input Mode types
+pub struct NoPull;
 
 /// Digital Output Mode
 pub struct OutputDigital;
@@ -317,6 +319,17 @@ macro_rules! gpio {
                         let offset = 2 * $i;
 
                         let pull_type = 0b10;
+                        pupdr.pupdr().modify(|r, w| unsafe {
+                            w.bits((r.bits() & !(0b11 << offset)) | (pull_type << offset))
+                        });
+
+                        $PXi { _mode: PhantomData }
+                    }
+                    /// Defines pin as No Pull Up Down
+                    pub fn no_pull(self, pupdr: &mut PUPDR) -> $PXi<Input<NoPull>>{
+                        let offset = 2 * $i;
+
+                        let pull_type = 0b00;
                         pupdr.pupdr().modify(|r, w| unsafe {
                             w.bits((r.bits() & !(0b11 << offset)) | (pull_type << offset))
                         });

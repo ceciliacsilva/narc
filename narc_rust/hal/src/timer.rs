@@ -49,22 +49,15 @@ macro_rules! hal {
                     T: Into<Hertz>
                 {
                     self.tim.cr1.modify(|_, w| w.cen().clear_bit());
-
                     self.tim.cnt.reset();
 
                     self.timeout = timeout.into();
-
-                    let frequency = self.timeout.0;
-
-                    let ticks = self.clocks.pclk1().0 * if self.clocks.ppre1() == 1 { 1 } else { 2 }
-                               / frequency;
-
-                    let psc = u16((ticks - 1) / (1 << 16)).unwrap();
-
+                    let freq = self.timeout.0;
+                    let clk = self.clocks.pclk1().0 * if self.clocks.ppre1() == 1 { 1 } else { 2 };
+                    let ticks = clk / freq;
+                    let psc = u16(ticks / (1 << 16)).unwrap();
                     self.tim.psc.write(|w| unsafe { w.psc().bits(psc) });
-
                     let arr = u16(ticks / u32(psc + 1)).unwrap();
-
                     self.tim.arr.write(|w| unsafe { w.arr().bits(arr) });
 
                     self.tim.cr1.modify(|_, w| w.cen().set_bit());

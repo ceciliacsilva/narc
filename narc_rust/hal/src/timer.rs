@@ -3,7 +3,7 @@
 use cast::{u16, u32};
 use embedded_hal::timer::{CountDown, Periodic};
 use nb;
-use stm32l052::{TIM6};
+use stm32l052::{TIM6, TIM2};
 use void::Void;
 
 use rcc::{APB1, Clocks};
@@ -26,6 +26,7 @@ pub trait TimerExt: Sized {
 }
 
 impl TimerExt for TIM6 {
+
     type apb = APB1;
 
     fn timer<T>(self, timeout: T, clocks: Clocks, apb: &mut Self::apb) -> Timer<Self>
@@ -33,6 +34,17 @@ impl TimerExt for TIM6 {
         T: Into<Hertz>
     {
         Timer::_tim6(self, timeout, clocks, apb)
+    }
+}
+
+impl TimerExt for TIM2 {
+    type apb = APB1;
+
+    fn timer<T>(self, timeout: T, clocks: Clocks, apb: &mut Self::apb) -> Timer<Self>
+    where
+        T: Into<Hertz>
+    {
+        Timer::_tim2(self, timeout, clocks, apb)
     }
 }
 
@@ -49,23 +61,19 @@ macro_rules! hal {
                     T: Into<Hertz>
                 {
                     self.tim.cr1.modify(|_, w| w.cen().clear_bit());
-
-                    self.tim.cnt.reset();
+                    self.tim.egr.write(|w| w.ug().set_bit());
+                    self.tim.cr1.modify(|_, w| w.urs().set_bit());
 
                     self.timeout = timeout.into();
-
-                    let frequency = self.timeout.0;
-
-                    let ticks = self.clocks.pclk1().0 * if self.clocks.ppre1() == 1 { 1 } else { 2 }
-                               / frequency;
-
-                    let psc = u16((ticks - 1) / (1 << 16)).unwrap();
-
-                    self.tim.psc.write(|w| unsafe { w.psc().bits(psc) });
-
+                    let freq = self.timeout.0;
+                    let clk = self.clocks.pclk1().0 * if self.clocks.ppre1() == 1 { 1 } else { 2 };
+                    let ticks = clk / freq;
+                    let psc = u16(ticks / (1 << 16)).unwrap();
+                    let psc = psc as u32;
+                    self.tim.psc.write(|w| unsafe { w.bits(psc) });
                     let arr = u16(ticks / u32(psc + 1)).unwrap();
-
-                    self.tim.arr.write(|w| unsafe { w.arr().bits(arr) });
+                    let arr = arr as u32;
+                    self.tim.arr.write(|w| unsafe { w.bits(arr) });
 
                     self.tim.cr1.modify(|_, w| w.cen().set_bit());
                 }
@@ -92,7 +100,7 @@ macro_rules! hal {
                     let mut timer = Timer {
                         clocks,
                         tim: tim,
-                        timeout: Hertz(0),
+                        timeout: Hertz(1),
                     };
 
                     timer.start(timeout);
@@ -116,6 +124,10 @@ macro_rules! hal {
                     }
                 }
 
+                pub fn clear_it(&mut self) {
+                    self.tim.sr.modify(|_, w| w.uif().clear_bit());
+                }
+
                 pub fn free(self) -> $TIM {
                     self.tim.cr1.modify(|_, w| w.cen().clear_bit());
                     self.tim
@@ -125,6 +137,8 @@ macro_rules! hal {
     }
 }
 
+/// TIM21-22 not supported, ppre1.
 hal! {
     TIM6: (_tim6, tim6en, tim6rst),
+    TIM2: (_tim2, tim2en, tim2rst),
 }

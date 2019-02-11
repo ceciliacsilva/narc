@@ -208,18 +208,15 @@ macro_rules! hal {
                         .modify(|_, w| unsafe{ w.oc4pe().set_bit().oc4m().bits(pwm1) });
                 }
 
-                tim.cr1.write(|w| w.cen().set_bit()); 
+                tim.cr1.write(|w| w.cen().set_bit());
 
                 tim.egr.write(|w| w.ug().set_bit());
-                
                 let clk = clocks.pclk1().0 * if clocks.ppre1() == 1 { 1 } else { 2 };
                 let freq = freq.0;
                 let ticks = clk / freq;
-                
                 let psc = u16(ticks / (1 << 16)).unwrap();
                 let psc = psc as u32;
                 tim.psc.write(|w| unsafe{w.bits(psc)} );
-                
                 let arr = u16(ticks / u32(psc + 1)).unwrap();
                 let arr = arr as u32;
                 tim.arr.write(|w| unsafe{ w.bits(arr) } );
